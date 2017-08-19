@@ -1,0 +1,116 @@
+<html wp-site wp-site-is-master-page>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="http://plugins.krajee.com/assets/6facb0ab/css/fileinput.min.css" rel="stylesheet" type="text/css">
+    <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+    <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"
+            integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+            crossorigin="anonymous"></script>
+    <script type="text/javascript"
+            src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-fileinput/4.3.8/js/fileinput.min.js"></script>
+    <script type="text/javascript" src="http://plugins.krajee.com/assets/6facb0ab/js/locales/zh.js"></script>
+
+
+    <link href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet"
+          type="text/css">
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css"
+          href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.6.0/sweetalert2.min.css"/>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/Dropify/0.2.2/css/dropify.css" rel="stylesheet" type="text/css"/>
+</head>
+<body style="background-color: #f4f3ef">
+<include file="common/header"/>
+<include file="common/personal_top"/>
+<div class="container">
+    <div class="section">
+        <div class="row">
+            <div class="col-lg-offset-1 col-lg-10" style="padding: 20px 0px;">
+                <ul class="nav nav-tabs nav-tabs-lg">
+                    <li role="presentation" class="active"><a href="{:url('index/morosely/modify_personaldata')}">编辑头像</a></li>
+                    <li role="presentation"><a href="{:url('index/morosely/show_personalData')}">个人资料</a></li>
+                    <li role="presentation"><a href="{:url('index/morosely/modify_true_name')}">实名认证</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2">
+                <div class="row article_warp card" style="min-height: 550px;">
+                        <div class="content">
+                            <include file="common/personal_data/personal_image"/>
+                        </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/Dropify/0.2.2/js/dropify.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.form/4.2.1/jquery.form.min.js"
+        integrity="sha384-tIwI8+qJdZBtYYCKwRkjxBGQVZS3gGozr3CtI+5JF/oL1JmPEHzCEnIKbDbLTCer"
+        crossorigin="anonymous"></script>
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.6.0/sweetalert2.min.js"></script>
+<script>
+    //封面设置
+    var drEvent = $('#face_image').dropify({
+        tpl: {
+            wrap: '<div class="dropify-wrapper"></div>',
+            loader: '<div class="dropify-loader"></div>',
+            message: '<div class="dropify-message"><span class="file-icon" /> <p>{{ default }}</p></div>',
+            preview: '<div class="dropify-preview"><span class="dropify-render"></span><div class="dropify-infos"><div class="dropify-infos-inner"><p class="dropify-infos-message">{{ replace }}</p></div></div></div>',
+            filename: '<p class="dropify-filename"><span class="file-icon"></span> <span class="dropify-filename-inner"></span></p>',
+            clearButton: '<button type="button" class="dropify-clear">{{ remove }}</button>',
+            errorLine: '<p class="dropify-error">{{ error }}</p>',
+            errorsContainer: '<div class="dropify-errors-container"><ul></ul></div>'
+        },
+        messages: {
+            'default': '点击或拖拽图片到此区域修改照片',
+            'replace': '点击或拖拽文件到此区域更换图片',
+            'error': '哎呀！, 什么地方出现问题了.',
+            'remove': '清除'
+        },
+        error: {
+            'fileSize': '图片太大 ({{ value }} max).',
+            'minWidth': '图片过小 ({{ value }}}px min).',
+            'maxWidth': '图片过宽 ({{ value }}}px max).',
+            'minHeight': '图片过低 ({{ value }}}px min).',
+            'maxHeight': '图片过高 ({{ value }}px max).',
+            'imageFormat': 'The image format is not allowed ({{ value }} only).'
+        }
+    });
+</script>
+<script>
+    var new_img_src = null;
+    var img_src = null;
+    $(function () {
+        img_src = $('.dropify-render').children().prop('src');
+
+    });
+    function put() {
+        new_img_src = $('.dropify-render').children().prop('src');
+        if (img_src != new_img_src && new_img_src != undefined) {
+            $('#personFace').ajaxForm({
+                dataType: 'json',
+                success: function (data) {
+                    if (data.success) {
+                        swal(data.success, '', 'success');
+                        img_src = new_img_src;
+                        new_img_src = null;
+                        // todo 跳转到资料展示页面
+//                        self.location='';
+                    }
+                }
+            });
+            $('#personFace').submit();
+        } else {
+            swal('图片已保存!', '', 'success');
+        }
+    }
+</script>
+<include file="common/footer"/>
+</body>
+</html>

@@ -1,0 +1,75 @@
+<html>
+<head>
+    <meta name="keywords" content="免费领养  免费领养小狗 免费领养小猫">
+    <meta name="description" content="中国第一个小动物公益网站">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet"
+          type="text/css">
+    <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet"
+          type="text/css">
+    <link href="http://www.getamaster.com/public/static/index/css/demo.css" rel="stylesheet" type="text/css">
+</head>
+<body style="background-color:#eff3f5">
+<include file="common/header" />
+<include file="common/personal_top"/>
+<div class="section">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-offset-1 col-lg-10" style="padding: 20px 0px;">
+                <ul class="nav nav-tabs nav-tabs-lg">
+                    <li role="presentation" class="active"><a href="{:url('index/morosely/show_personalData')}">个人资料</a></li>
+                    <li role="presentation"><a href="{:url('index/morosely/modify_true_name')}">实名认证</a></li>
+                    <li role="presentation" class="pull-right"><button class="btn">
+                        <a href="{:url('index/morosely/modify_personalData')}">编辑资料</a></button></li>
+                    <!--<li role="presentation"><a href="{:url('index/morosely/my_keep_blog')}">收藏</a></li>-->
+                </ul>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-offset-1 col-lg-10">
+                <div>
+                    <div class="content" style="margin-top:30px;padding-left: 60px;min-height: 600px;">
+                        <div class="row clearfix">
+                            <div class="col-lg-2">
+                                <a href="{:url('index/morosely/modify_personal_image')}" title="点击修改头像">
+                                    <img src="__MOROSELY_THUMB_PIC__<php>if($morosely->pic) echo $morosely->pic;</php>"
+                                         style="height: 100px;width: 100px;" alt="">
+                                </a>
+                            </div>
+                            <div class="col-lg-offset-6" style="padding-left: 15px;margin-top: 10px;">
+                                <p>姓名：{$morosely.trueName}<a href="{:url('index/morosely/modify_true_name')}"><if condition="!$trueNameCheck">信息未完善，点击完善实名信息。</if></a></p>
+                                <p>昵称：{$morosely.username}</p>
+                                <p>年龄：{$morosely.birthday}</p>
+                            </div>
+                        </div>
+                        <div class="row" style="margin-top:30px;">
+                            <div class="col-lg-6">
+                                <p>邮箱：{$morosely.address}</p>
+                            </div>
+                            <div class="col-lg-6">
+                                <p>城市：{$morosely.city}</p>
+                            </div>
+                        </div>
+                        <div class="row" style="margin-top:30px;">
+                            <div class="col-lg-12">
+                                <p>公司：{$morosely.company}</p>
+                            </div>
+                        </div>
+                        <div class="row" style="margin-top:30px;">
+                            <div class="col-lg-12">
+                                <p>格言：{$morosely.maxim}</p>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<include file="common/footer"/>
+</body>
+</html>

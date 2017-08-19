@@ -1,0 +1,58 @@
+<html>
+    <head>
+        <meta name="description" content="公益管理员登陆">
+        <title>登录</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+        <script type="text/javascript" src="http://netdna.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+        <link href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+        <link href="http://pingendo.github.io/pingendo-bootstrap/themes/default/bootstrap.css" rel="stylesheet" type="text/css">
+    </head>
+    <body>
+        <div class="hidden-sm hidden-xs section"></div>
+        <div class="section">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-4 hidden-sm hidden-xs"></div>
+                    <div class="col-md-4">
+                        <div class="col-md-12">
+                            <div class="btn-link panel panel-primary">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title" draggable="true">机构管理员登录</h3>
+                                </div>
+                                <div class="panel-body">
+                                    <form role="form" action="{:url('index/Login/charity_login')}" method="post">
+                                        <div class="form-group has-feedback">
+                                            <input class="form-control" id="email" name="email" placeholder="请输入邮箱" type="email">
+                                        </div>
+                                        <div class="form-group has-feedback">
+                                            <input class="form-control" id="password" name="password" placeholder="请输入密码" type="password">
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="col-xs-5" style="margin-bottom: 10px;margin-left: -15px;">
+                                                <input class="form-control" id="captcha" placeholder="请输入验证码" type="text">
+                                            </div>
+                                            <div class="col-xs-4" style="margin-left:15px;">
+                                                <img id="captcha_img" style="cursor: pointer" src="{:captcha_src()}" onclick="this.src='{:captcha_src()}?r'+Math.random()" alt="captcha" class="pull-right">
+                                            </div>
+                                            <div class="col-xs-3">
+                                                <a style="text-align: center;line-height: 30px;" href="javascript:;" onclick="document.getElementById('captcha_img').src='{:captcha_src()}?r'+Math.random()">换一个</a>
+                                            </div>
+                                        </div>
+                                        <button type="submit" class="btn btn-block btn-info">登录</button>
+                                        <div class="text-right" style="margin-top:10px;">
+                                            <a class="text-right" href="">首页</a>
+                                            <!--<a class="text-right" href="" style="margin-left: 10px;">注册</a>-->
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4"></div>
+    </body>
+</html>

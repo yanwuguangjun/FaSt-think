@@ -1,0 +1,255 @@
+<html>
+<head>
+    <meta name="keywords" content="免费领养  免费领养小狗 免费领养小猫">
+    <meta name="description" content="中国第一个小动物公益网站">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet"
+          type="text/css">
+    <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet"
+          type="text/css">
+    <link href="http://www.getamaster.com/public/static/index/css/demo.css" rel="stylesheet" type="text/css">
+</head>
+<body style="background-color:#eff3f5">
+<include file="common/header" />
+<div class="section">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div id="carousel-example" data-interval="false" class="carousel slide" data-ride="carousel">
+                    <div class="carousel-inner">
+                        <volist name="banner" id="banner">
+                            <div class="item <if condition='$key == 0'>active</if>" style="overflow: hidden;max-height: 350px;">
+                                <a href="{:url('index/index/show_article')}?id={$banner.id}">
+                                    <img style="margin:auto;position: relative;height: 350px;" class="img-responsive"
+                                         src="<if condition='$banner.faceImage'>__FACE_IMAGE__{$banner.faceImage}</if>">
+                                </a>
+                            </div>
+                        </volist>
+                        <volist name="activity_banner" id="activity_banner">
+                            <div class="item" style="overflow: hidden;max-height: 350px;">
+                                <a href="{:url('index/index/show_activity')}?id={$activity_banner.id}">
+                                    <img style="margin:auto;position: relative;height: 350px;" class="img-responsive"
+                                         src="__ACTIVITY_FACE__{$activity_banner.faceImage}">
+                                </a>
+                            </div>
+                        </volist>
+
+
+                        <!--<div class="item active">-->
+                            <!--<a href="">-->
+                            <!--<img style="height: 350px;" src="https://unsplash.imgix.net/photo-1423439793616-f2aa4356b37e?w=1024&amp;q=50&amp;fm=jpg&amp;s=3b42f9c018b2712544debf4d6a4998ff">-->
+                            <!--</a>-->
+                            <!--<div class="carousel-caption">-->
+                                <!--<h2>Title</h2>-->
+                                <!--<p>Description</p>-->
+                            <!--</div>-->
+                        <!--</div>-->
+                    </div>
+                    <a id="left" class="left carousel-control" href="#carousel-example" data-slide="prev"><i
+                            class="icon-prev  fa fa-angle-left"></i></a>
+                    <a id="right" class="right carousel-control" href="#carousel-example" data-slide="next"><i
+                            class="icon-next fa fa-angle-right"></i></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="section">
+    <div class="container">
+        <div class="row" style="margin-top: 10px;">
+            <div class="col-lg-6">
+                <h4>精彩文章</h4>
+            </div>
+            <div class="col-lg-6">
+                <a href="{:url('index/index/ordinary')}" class="pull-right">
+                    <h4>更多文章>></h4>
+                </a>
+            </div>
+        </div>
+        <div class="row">
+            <volist name='blog' id='blog'>
+                <div class="col-md-3 ar-warp">
+                    <div class="" style="overflow: hidden;position: relative;">
+                        <a href="{:url('index/index/show_article')}?id={$blog.blogId}" style="min-height: 200px;position: relative">
+                            <img src="<if condition='$blog.faceImage'>__FACE_THUMB_IMAGE__{$blog.faceImage}</if>"
+                                style="max-height: 160px;width: 262px;">
+                        </a>
+                        <h5>
+                            <span style="top: -2px;" class="label label-default">New</span>{$blog.title}</h5>
+                        <ul class="media-list">
+                            <li class="media" style="margin-top: 5px;">
+                                <a class="pull-left" href="{:url('index/morosely/search_personalData')}?id={$blog.moroselyId}">
+                                    <img class="img-circle media-object img-responsive" src="__MOROSELY_THUMB_PIC__{$blog.pic}"
+                                         style="height: 25px;width: 25px;"   height="25" width="25"></a>
+                                <div class="media-body">
+                                    <a href="{:url('index/morosely/search_personalData')}?id={$blog.id}">
+                                        <p style="line-height: 25px;font-size: 13px;">{$blog.username}
+                                            <a href="{:url('index/index/show_article')}?id={$blog.id}" class="btn btn-info btn-xs pull-right"  style="margin-left: 4px;line-height: 25px;margin-top: 4px;"><i class="fa fa-fw fa-thumbs-up"></i><span
+                                                    class="badge">{$blog.love}</span></a>
+                                            <a href="{:url('index/index/show_article')}?id={$blog.id}" class="btn btn-info btn-xs pull-right"  style="margin-left: 4px;line-height: 25px;margin-top: 4px;"><i class="fa fa-fw fa-comments"></i><span
+                                                    class="badge">{$blog.see}</span></a>
+                                            <!--<a href="{:url('index/index/show_article')}?id={$blog.id}" class="btn btn-info btn-xs pull-right"  style="margin-left: 4px;line-height: 25px;margin-top: 4px;"><i class="fa fa-fw s fa-weibo"></i><span-->
+                                                    <!--class="badge">{$blog.comment}</span></a>-->
+                                        </p>
+                                    </a>
+                                </div>
+
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </volist>
+        </div>
+    </div>
+</div>
+<div class="section">
+    <div class="container">
+        <div class="row">
+                <div class="col-md-12 text-center">
+                    <ul class="pagination">
+                        {$page}
+                    </ul>
+                </div>
+        </div>
+    </div>
+</div>
+<div class="section" style="margin-top:30px;background-color: #ffffff;padding: 20px;">
+    <div class="container">
+        <div class="row" style="padding: 0 30px" id="about_new">
+                <div class="col-lg-8">
+                    <ul class="nav nav-tabs nav-tabs-lg">
+                        <li role="presentation" class="active"><a href="#">养成经验</a></li>
+                    </ul>
+                    <div class="new_bring_up">
+                        <volist name="new_bring_up" id="new_bring_up">
+                            <div class="media media-warp" style="border-style:solid;border-width: 2px;border-color: white white darkgrey;border-bottom: 2px solid darkgrey;padding: 10px 10px;">
+                                <if condition='$new_bring_up.faceImage'>
+                                    <div class="media-left">
+                                        <a href="">
+                                            <div style="overflow: hidden;width: 160px;height: 130px;position: relative;">
+                                                <img class="media-object auto_resp" style="position: absolute;" src="__FACE_THUMB_IMAGE__{$new_bring_up.faceImage}" alt="...">
+                                            </div>
+                                        </a>
+                                    </div>
+                                </if>
+                                <div class="media-body" style="padding: 0 10px 0 10px">
+                                    <a href="">
+                                        <h4 class="media-heading">
+                                            <a href="{:url('index/index/show_arci')}"></a>
+                                            {$new_bring_up.title}</h4>
+                                    </a>
+                                    <div style="font-size: 12px;color: #999999">
+                                        {$new_bring_up.description}
+                                    </div>
+                                    <ul class="media-list">
+                                        <li class="media" style="margin-top: 15px;">
+                                            <a class="pull-left" href="{:url('index/morosely/search_personalData')}?id={$blog.moroselyId}">
+                                                <img class="img-circle media-object img-responsive" src="__MOROSELY_THUMB_PIC__{$new_bring_up.pic}"
+                                                     style="height: 25px;width: 25px;"   height="25" width="25"></a>
+                                            <div class="media-body">
+                                                <a href="{:url('index/morosely/search_personalData')}?id={$blog.id}">
+                                                    <p style="line-height: 25px;font-size: 13px;">{$new_bring_up.username}
+                                                        <a href="{:url('index/index/show_article')}?id={$blog.id}" class="btn btn-info btn-xs"  style="margin-left: 4px;line-height: 25px;margin-top: 4px;"><i class="fa fa-fw fa-thumbs-up"></i><span
+                                                                class="badge">{$new_bring_up.love}</span></a>
+                                                        <a href="{:url('index/index/show_article')}?id={$blog.id}" class="btn btn-info btn-xs"  style="margin-left: 4px;line-height: 25px;margin-top: 4px;"><i class="fa fa-fw fa-comments"></i><span
+                                                                class="badge">{$new_bring_up.see}</span></a>
+                                                    </p>
+                                                </a>
+                                            </div>
+
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                        </volist>
+                    </div>
+                    <script>
+                        $('.auto_resp').each(function () {
+                            this.height='130';
+                            var lf = -((this.width-160)/2);
+                            this.style.marginLeft = lf;
+                        });
+                    </script>
+                </div>
+                <div class="col-lg-4" style="padding: 0 10px">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <h5 style="padding-bottom: 8px;"><a href="{:url('index/index/activity_list')}">最新活动</a></h5>
+                            <volist name="new_activity" id="new_activity">
+                                <div class="media media-activity" style="position: relative;margin-top: 0px;">
+                                    <div class="text-center" style="width: 320px;height: 140px;overflow: hidden;">
+                                        <img class="media-object new_activity_object" src="__ACTIVITY_FACE_THUMB__{$new_activity.faceImage}"/>
+                                    </div>
+                                    <div class="text-center hidden" style="height: 140px;width: 320px;position: absolute;background-color: rgba(24,24,24,0.33);top: 0px;color: white;padding-top: 60px;">{$new_activity.title}</div>
+                                </div>
+                            </volist>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <h5 style="margin-top: 55px;padding-bottom: 5px;"><a href="{:url('index/adopt/adopt_list')}">最新领养</a></h5>
+                            <volist name="new_adopt" id="new_adopt">
+                                <div class="media media-activity" style="position: relative;margin-top: 0px;">
+                                    <div class="text-center" style="width: 320px;height: 140px;overflow: hidden;">
+                                        <img class="media-object new_adopt_object" src="__ADOPT_THUMB_PIC__{$new_adopt.images}"/>
+                                    </div>
+                                    <div class="text-center hidden" style="height: 140px;width: 320px;position: absolute;background-color: rgba(24,24,24,0.33);top: 0px;color: white;padding-top: 60px;">{$new_adopt.title}</div>
+                                </div>
+                            </volist>
+                        </div>
+                    </div>
+                    <script>
+                        $(document).ready(function () {
+                            $('.new_activity_object').each(function () {
+                                this.height='140';
+                                var lf = -((this.width-320)/2);
+                                this.style.marginLeft = lf;
+                            });
+                            $('.new_adopt_object').each(function () {
+                                this.width='320';
+                                var lf = -((this.height-140)/2);
+                                this.style.marginTop = lf;
+                            });
+                        })
+                    </script>
+
+
+                </div>
+
+            <script>
+                $('.media-activity').hover(function () {
+                    $(this).children().first().next().removeClass('hidden');
+                },function () {
+                    $(this).children().first().next().addClass('hidden');
+                });
+            </script>
+        </div>
+    </div>
+</div>
+<script>
+    function new_beauty() {
+        $('#about_new').load("{:url('index/index/new_beauty')}");
+    }
+    //此处功能为自动点击下一个banner。。。。没法子
+    function click_next() {
+        $('#right').click();
+    }
+    $(function () {
+        setInterval(click_next, 1000 * 8);
+    });
+    $('.media-warp').hover(function () {
+        $(this).css({'border':'solid 2px #3498db','margin-bottom':'0px'});
+
+    },function () {
+        $(this).css({'border':'solid 2px white','border-bottom':'solid 2px darkgrey','border-top':'2px solid white'})
+    })
+
+</script>
+
+<include file="common/footer"/>
+</body>
+</html>

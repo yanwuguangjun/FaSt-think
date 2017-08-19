@@ -1,0 +1,422 @@
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="http://www.getamaster.com/public/static/index/css/demo.css" rel="stylesheet" type="text/css">
+    <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+    <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"
+            integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+            crossorigin="anonymous"></script>
+    <script type="text/javascript" src="http://www.getamaster.com/public/static/area/area.js"></script>
+    <script type="text/javascript"
+            src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.16.0/jquery.validate.min.js"></script>
+    <script src="http://static.runoob.com/assets/jquery-validation-1.14.0/dist/localization/messages_zh.js"></script>
+    <!-- validate中文插件-->
+
+    <script type="text/javascript" src="http://plugins.krajee.com/assets/6facb0ab/js/locales/zh.js"></script>
+
+    <link href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet"
+          type="text/css">
+
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <!-- Include external CSS. -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css" rel="stylesheet"
+          type="text/css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.25.0/codemirror.min.css">
+    <!-- Include Editor style. -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/froala-editor/2.5.1/css/froala_editor.pkgd.min.css"
+          rel="stylesheet" type="text/css"/>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/froala-editor/2.5.1/css/froala_style.min.css" rel="stylesheet"
+          type="text/css"/>
+    <link rel="stylesheet"
+          href="http://www.getamaster.com/public/static/timepicker/bootstrap-datetimepicker.css">
+    <link rel="stylesheet" type="text/css"
+          href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.6.0/sweetalert2.min.css"/>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/Dropify/0.2.2/css/dropify.css" rel="stylesheet" type="text/css"/>
+    <style>
+        .error {
+            color: red
+        }
+    </style>
+</head>
+<body>
+<include file="common/header"/>
+
+<div class="section">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-10">
+                <div class="row">
+                    <div class="col-md-12">
+                        <h1>申请发布活动</h1>
+                        <ul class="breadcrumb">
+                            <li>
+                                <a href="{:url('index/index/index')}">首页</a>
+                            </li>
+                            <li>
+                                <a href="{:url('index/index/activity_list')}">活动</a>
+                            </li>
+                            <li class="active">发起活动</li>
+                        </ul>
+                    </div>
+                </div>
+                <form class="form-horizontal" id="form" enctype="multipart/form-data" action="" method="post">
+                    <div class="form-group">
+                        <label class="control-label col-sm-2">活动主题</label>
+                        <div class="col-sm-10">
+                            <input name="title" title="" class="form-control" id="title" placeholder="5-20字活动名称、主题">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-2">活动简介</label>
+                        <div class="col-sm-10">
+                            <input name="description" title="" class="form-control" id="description"
+                                   placeholder="10-20字活动简介">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-2">封面图片</label>
+                        <div class="col-sm-10">
+                            <input id="face_image" name="images" type="file" class="file-loading" multiple>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="note" class="control-label  col-sm-2">详细信息</label>
+                        <div class="col-sm-10">
+                            <textarea typeof="text" id="note" name="content" class="form-control" style="height: 100px;"
+                                      placeholder="相关详细信息"></textarea>
+                        </div>
+                    </div>
+
+                    <script>
+                        $(document).on('ready', function () {
+                            $("#input-25").fileinput({
+                                overwriteInitial: true,
+                                language: "zh",
+                                uploadUrl: "...",
+                                maxFileCount: 9,
+                                minFileCount: 1,
+                                showUpload: false,
+                                dropZoneEnabled: false,
+                                allowedFileExtensions: ["jpg", "gif", "png", "jpeg"]
+                            });
+                        });
+                    </script>
+
+                    <div class="form-group has-feedback">
+                        <label for="inputEmail3" class="control-label col-sm-2 col-lg-2">联系邮箱 </label>
+                        <div class="col-sm-10">
+                            <input type="email" class="form-control" name="email" id="inputEmail3" placeholder="请输入邮箱">
+                        </div>
+                    </div>
+
+                    <div id="location" class="form-group has-feedback">
+                        <label for="inputEmail3" class="control-label col-sm-2">活动地址</label>
+                        <div class="col-lg-2 col-sm-2">
+                            <select name="province" class="form-control" title="省份"></select>
+                        </div>
+                        <div class="col-lg-2 col-sm-2">
+                            <select name="city" class="form-control" title="市"></select>
+                        </div>
+                        <div class="col-lg-2 col-sm-2">
+                            <select name="area" class="form-control" title="区"></select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-2" for="startTime">活动开始时间</label>
+                        <div class="col-sm-3">
+                            <input type="text" class="form-control" name="startTime" id="startTime"
+                                   placeholder="选择开始时间">
+                        </div>
+                        <label class="control-label col-sm-2" for="endTime">活动结束时间</label>
+                        <div class="col-sm-3">
+                            <input type="text" class="form-control" name="endTime" id="endTime" placeholder="选择结束时间">
+                        </div>
+                    </div>
+                    <div class="form-group">
+
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-2"></label>
+                        <div class="col-sm-10">
+                            <input name="agree" id="agree" type="checkbox" data-title="确认已阅读"
+                                   data-content="“版权声明”和“隐私保护”" data-toggle="popover" value="yes"/>&nbsp;我已阅读
+                            <a style="color: rgb(52, 73, 94); outline: none medium; font-family: 'Microsoft Yahei', 'Helvetica Neue';">《版权声明》</a>和
+                            <a style="color: rgb(52, 73, 94); outline: none medium; font-family: 'Microsoft Yahei', 'Helvetica Neue';">《隐私保护》</a>
+
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-offset-2 col-sm-10">
+                            <button type="button" onclick="put()" class="btn btn-success">提 交</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="col-md-2">
+                <div class="row" style="margin-top: 70px;">
+                    <volist name="new_activity" id="new_activity">
+                        <div class="media media-activity" style="position: relative;margin-top: 0px;">
+                            <div class="text-center" style="width: 320px;height: 140px;overflow: hidden;">
+                                <img class="media-object new_activity_object" src="__ACTIVITY_FACE_THUMB__{$new_activity.faceImage}"/>
+                            </div>
+                            <div class="text-center hidden" style="height: 140px;width: 320px;position: absolute;background-color: rgba(24,24,24,0.33);top: 0px;color: white;padding-top: 60px;">{$new_activity.title}</div>
+                        </div>
+                    </volist>
+                    <script>
+                        $('.new_activity_object').each(function () {
+                            this.height='100';
+                            var lf = -((this.width-220)/2);
+                            this.style.marginLeft = lf;
+                        });
+                    </script>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<include file="common/footer"/>
+
+</body>
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/froala-editor/2.5.1/js/froala_editor.min.js"></script>
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/froala-editor/2.5.1/js/plugins/image.min.js"></script>
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/froala-editor/2.5.1/js/languages/zh_cn.js"></script>
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/froala-editor/2.5.1/js/plugins/link.min.js"></script>
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/froala-editor/2.5.1/js/plugins/table.min.js"></script>
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/froala-editor/2.5.1/js/plugins/emoticons.min.js"></script>
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/froala-editor/2.5.1/js/plugins/font_size.min.js"></script>
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/froala-editor/2.5.1/js/plugins/char_counter.min.js"></script>
+<script src="http://www.getamaster.com/public/static/timepicker/datetimepicker.js"></script>
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/Dropify/0.2.2/js/dropify.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.form/4.2.1/jquery.form.min.js"
+        integrity="sha384-tIwI8+qJdZBtYYCKwRkjxBGQVZS3gGozr3CtI+5JF/oL1JmPEHzCEnIKbDbLTCer"
+        crossorigin="anonymous"></script>
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.6.0/sweetalert2.min.js"></script>
+<script>
+    var drEvent = $('#face_image').dropify({
+        tpl: {
+            wrap: '<div class="dropify-wrapper"></div>',
+            loader: '<div class="dropify-loader"></div>',
+            message: '<div class="dropify-message"><span class="file-icon" /> <p>{{ default }}</p></div>',
+            preview: '<div class="dropify-preview"><span class="dropify-render"></span><div class="dropify-infos"><div class="dropify-infos-inner"><p class="dropify-infos-message">{{ replace }}</p></div></div></div>',
+            filename: '<p class="dropify-filename"><span class="file-icon"></span> <span class="dropify-filename-inner"></span></p>',
+            clearButton: '<button type="button" class="dropify-clear">{{ remove }}</button>',
+            errorLine: '<p class="dropify-error">{{ error }}</p>',
+            errorsContainer: '<div class="dropify-errors-container"><ul></ul></div>'
+        },
+        messages: {
+            'default': '点击或拖拽图片到此区域修改活动封面',
+            'replace': '点击或拖拽文件到此区域更换活动封面图片',
+            'error': '哎呀！, 什么地方出现问题了.',
+            'remove': '清除'
+        },
+        error: {
+            'fileSize': '图片太大 ({{ value }} max).',
+            'minWidth': '图片过小 ({{ value }}}px min).',
+            'maxWidth': '图片过宽 ({{ value }}}px max).',
+            'minHeight': '图片过低 ({{ value }}}px min).',
+            'maxHeight': '图片过高 ({{ value }}px max).',
+            'imageFormat': 'The image format is not allowed ({{ value }} only).'
+        }
+    });
+</script>
+<script>
+    $(function () {
+        $('textarea').froalaEditor({
+            toolbarButtons: ['fullscreen', 'print', 'bold', 'italic', 'underline', 'strikeThrough', 'subscript', 'superscript', 'fontFamily', 'fontSize', 'specialCharacters', 'color', 'emoticons', 'inlineStyle', 'paragraphStyle', 'paragraphFormat', 'align', 'formatOL', 'formatUL', 'outdent', 'indent', 'quote', 'insertHR', 'insertLink', 'insertImage', 'insertTable', 'undo', 'redo', 'clearFormatting', 'selectAll', 'html'],
+            toolbarButtonsMD: ['fullscreen', 'bold', 'italic', 'underline', 'fontFamily', 'fontSize', 'color', 'emoticons', 'paragraphStyle', 'paragraphFormat', 'align', 'formatOL', 'formatUL', 'outdent', 'indent', 'quote', 'insertHR', 'insertLink', 'insertImage', 'insertTable', 'undo', 'redo', 'clearFormatting'],   //在大屏幕上显示内容
+            toolbarButtonsSM: ['fullscreen', 'bold', 'italic', 'underline', 'fontFamily', 'fontSize', 'color', 'emoticons', 'paragraphStyle', 'paragraphFormat', 'align', 'formatOL', 'formatUL', 'outdent', 'indent', 'quote', 'insertHR', 'insertLink', 'insertImage', 'insertTable', 'undo', 'redo', 'clearFormatting'],   //在中等屏幕上显示按钮
+            toolbarButtonsXS: ['fullscreen', 'bold', 'italic', 'underline', 'fontFamily', 'fontSize', 'color', 'emoticons', 'paragraphStyle', 'paragraphFormat', 'align', 'formatOL', 'formatUL', 'outdent', 'indent', 'quote', 'insertHR', 'insertLink', 'insertImage', 'insertTable', 'undo', 'redo', 'clearFormatting'],   //在小屏幕上显示按钮
+            // Set the image upload URL.
+            //  '-',表示还行；
+            imageUploadMethod: 'post',
+            imageManagerLoadURL: '',
+            imageUploadURL: 'http://www.getamaster.com/index/activity/get_activity_face',
+            // Set the image delete URL.
+            imageManagerDeleteURL: 'http://www.getamaster.com/index/getfiles/delete',
+            imageMultipleStyles: true,       //允许上传多文件；
+            imageMaxSize: 1024 * 1024 * 3,   //最大图片大小
+            charCounterCount: true,          //计数器
+            charCounterMax: 3000,            //最大字数 -1 为不限制 默认不限制
+            // videoDefaultDisplay: 'block',
+            tooltips: true,
+            pluginsEnabled: null,
+            language: 'zh_cn',
+            quickInsertButtons: ['image'],
+            heightMin: 400
+        })
+    });
+    $(function () {
+        $('.fr-wrapper').next().remove();                   //简易破解富文本插件
+    });
+
+    $(function () {
+        var get_date = new Date();
+        var this_year = get_date.getFullYear();
+        var end_year = this_year + 1;
+//    var start_year = get_date.getFullYear() - 75;
+        var month = get_date.getMonth() + 1;                         //获取当前月份
+        var month_day = "-" + month + "-" + get_date.getDate();
+        var time = $('#startTime');
+        time.datetimepicker({
+            minView: "month",
+            startView: 4,
+            startDate: this_year + month_day,
+            endDate: end_year + month_day,
+            autoclose: true,
+            thisYearBtn: false,
+            minuteStep: 10,
+            format: "yyyy-mm-dd"
+        });
+
+        $('#endTime').datetimepicker({
+            minView: "month",
+            startView: 4,
+            startDate: this_year + month_day,
+            endDate: end_year + month_day,
+            autoclose: true,
+            thisYearBtn: false,
+            minuteStep: 10,
+            format: "yyyy-mm-dd"
+        });
+    });
+
+    function put() {
+        $('#form').ajaxForm({
+            dataType: 'json',
+            success: function (data) {
+                swal('test', '', 'error');
+                if (data.error) {
+                    swal(data.error, '', 'error');
+                } else if (data.id) {
+                    swal('申请发起活动成功！', '', 'success');
+                    //todo  跳转地址
+//                    self.location="";
+                }
+            }
+        });
+        $('#form').submit();
+    }
+</script>
+<script>
+
+    $(function () {
+        $("#form").validate({
+            //图片单独验证
+            rules: {
+                title: {
+                    required: true,
+                    maxlength: 20,
+                    minlength: 5
+                },
+                note: {
+                    required: true,
+                    minlength: 50,
+                    maxlength: 3000
+                },
+                startTime:{
+                    required:true
+                },
+                endTime:{
+                    required:true
+                },
+                images: {
+                    required: true
+                },
+                description: {
+                    required: true,
+                    minlength: 10,
+                    maxlength: 20
+                },
+                email: {
+                    required: true,
+                    email: true
+                },
+                address: {
+                    required: true,
+                    maxlength: 20
+                },
+                province: "required",
+                city: "required",
+                area: "required",
+                agree: "required"
+            },
+
+            messages: {
+                startTime:{
+                    required:"请选择活动开始时间"
+                },
+                endTime:{
+                    required:"请选择结束时间"
+                },
+                title: {
+                    required: "必须填写标题",
+                    maxlength: "标题长度不得长于20",
+                    minlength: "标题长度不得短于5"
+                },
+                description: {
+                    required: "必须填写活动简介",
+                    maxlength: "简介过长",
+                    minlength: "请填写10个字以上简介"
+                },
+                address: {
+                    required: "线下活动必须填写详细地址",
+                    maxlength: "地址过长"
+                },
+                note: {
+                    required:"活动",
+                    minlength: "活动内容介绍不低于50字",
+                    maxlength: "活动内容介绍不超过3000字"
+                },
+                agree: "确认阅读发布领养须知",
+                email: {
+                    required: "必须填写邮箱",
+                    email: "邮箱格式不对"
+                }
+            }
+        })
+    })
+</script>
+
+<script type="text/javascript">
+//    var $town = $('#location select[name="town"]');
+//    var townFormat = function (info) {
+//        $town.hide().empty();
+//        if (info['code'] % 1e4 && info['code'] < 7e5) {	//是否为“区”且不是港澳台地区
+//            $.ajax({
+//                url: 'http://passer-by.com/data_location/town/' + info['code'] + '.json',
+//                dataType: 'json',
+//                success: function (town) {
+//                    $town.show();
+//                    for (i in town) {
+//                        $town.append('<option value="' + i + '">' + town[i] + '</option>');
+//                    }
+//                }
+//            });
+//        }
+//    };
+    $('#location').citys({
+        required: false,
+        onChange: function (info) {
+            townFormat(info);
+        }
+    }, function (api) {
+        var info = api.getInfo();
+        townFormat(info);
+    });
+
+</script>
+</html>

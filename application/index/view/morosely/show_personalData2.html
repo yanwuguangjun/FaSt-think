@@ -1,0 +1,132 @@
+<html wp-site wp-site-is-master-page>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="http://plugins.krajee.com/assets/6facb0ab/css/fileinput.min.css" rel="stylesheet" type="text/css">
+    <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+    <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"
+            integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+            crossorigin="anonymous"></script>
+    <script type="text/javascript"
+            src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-fileinput/4.3.8/js/fileinput.min.js"></script>
+    <script type="text/javascript" src="http://plugins.krajee.com/assets/6facb0ab/js/locales/zh.js"></script>
+
+
+    <link href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet"
+          type="text/css">
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css"
+          href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.6.0/sweetalert2.min.css"/>
+    <link href="http://www.getamaster.com/public/static/index/css/paper-dashboard.css" rel="stylesheet" type="text/css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/Dropify/0.2.2/css/dropify.css" rel="stylesheet" type="text/css"/>
+
+
+</head>
+<body>
+<include file="common/header"/>
+
+<div class="container">
+    <div class="section">
+        <div class="row">
+            <div class="col-md-9">
+                <div class="row article_warp card">
+                    <div>
+                        <div class="header">
+                            <h4 class="title">个人资料<a style="margin-left: 20px;" title="点击修改个人资料" href="{:url('index/morosely/modify_personalDate')}">修改</a></h4>
+                        </div>
+                        <div class="content" style="margin-top:30px;padding-left: 60px;min-height: 600px;">
+                            <div class="row clearfix">
+                                <div class="col-lg-2">
+                                    <a href="{:url('index/morosely/modify_personal_image')}" title="点击修改头像">
+                                        <img src="__MOROSELY_THUMB_PIC__<php>if($morosely->pic) echo $morosely->pic;</php>"
+                                             style="height: 100px;width: 100px;" alt="">
+                                    </a>
+                                </div>
+                                <div class="col-lg-offset-6" style="padding-left: 15px;margin-top: 10px;">
+                                    <p>姓名：{$morosely.trueName}<a href="{:url('index/morosely/modify_true_name')}"><if condition="!$trueNameCheck">信息未完善，点击完善实名信息。</if></a></p>
+                                    <p>昵称：{$morosely.username}</p>
+                                    <p>年龄：{$morosely.birthday}</p>
+                                </div>
+                            </div>
+                            <div class="row" style="margin-top:30px;">
+                                <div class="col-lg-6">
+                                    <p>邮箱：{$morosely.address}</p>
+                                </div>
+                                <div class="col-lg-6">
+                                    <p>城市：{$morosely.city}</p>
+                                </div>
+                            </div>
+                            <div class="row" style="margin-top:30px;">
+                                <div class="col-lg-12">
+                                    <p>公司：{$morosely.company}</p>
+                                </div>
+                            </div>
+                            <div class="row" style="margin-top:30px;">
+                                <div class="col-lg-12">
+                                    <p>格言：{$morosely.maxim}</p>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <include file="common/moro sely_face"/>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/froala-editor/2.5.1/js/froala_editor.min.js"></script>
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/froala-editor/2.5.1/js/languages/zh_cn.js"></script>
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/froala-editor/2.5.1/js/plugins/emoticons.min.js"></script>
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/froala-editor/2.5.1/js/plugins/char_counter.min.js"></script>
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.form/4.2.1/jquery.form.min.js"
+        integrity="sha384-tIwI8+qJdZBtYYCKwRkjxBGQVZS3gGozr3CtI+5JF/oL1JmPEHzCEnIKbDbLTCer"
+        crossorigin="anonymous"></script>
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.6.0/sweetalert2.min.js"></script>
+<script>
+    function floaraEd() {
+        $('textarea').froalaEditor({
+            toolbarButtons: ['fontFamily', 'emoticons'],
+            toolbarButtonsMD: ['fontFamily', 'emoticons'],   //在大屏幕上显示内容
+            toolbarButtonsSM: ['fontFamily', 'emoticons'],   //在中等屏幕上显示按钮
+            toolbarButtonsXS: ['fontFamily', 'emoticons'],   //在小屏幕上显示按钮
+            charCounterCount: true,    //计数器
+            charCounterMax: 140,      //最大字数 -1 为不限制 默认不限制
+            tooltips: true,
+            pluginsEnabled: null,
+            language: 'zh_cn',
+            heightMin: 120
+        });
+        $('.fr-wrapper').next().remove();                   //简易破解富文本插件
+    }
+</script>
+<script>
+    function go_modify_img() {
+        self.location = "{:url('index/morosely/modify_personal_image')}";
+    }
+    function put() {
+        $('form').ajaxForm({
+            dataType: 'json',
+            success: function (data) {
+                if (data.id) {
+                    swal('保存照片成功!', '', 'success');
+                }
+            }
+        });
+        $('form').submit();
+    }
+</script>
+<include file="common/footer"/>
+</body>
+</html>

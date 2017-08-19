@@ -1,0 +1,15 @@
+<div class="row" style="margin-top: 40px;">
+    <div class="col-sm-8 col-sm-offset-2">
+        <div class="form-group">
+            <form id="personFace" method="post"
+                  enctype="multipart/form-data">
+                <input type="file" class="dropify" name="pic" id="face_image"
+                       data-min-width="400"
+                       data-allowed-file-extensions="jpg png jpeg" data-default-file="__MOROSELY_PIC__{$morosely.pic}" />
+            </form>
+        </div>
+    </div>
+</div>
+<div class="text-center"  style="margin-top:10px;">
+    <button type="button" onclick="put()" class="btn btn-info btn-fill btn-wd">保存图片</button>
+</div>

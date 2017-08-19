@@ -1,0 +1,97 @@
+<!doctype lang='zh-cn' html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>后台管理</title>
+    <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.0/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="__ASTYLEURL__css/common.css"/>
+    <link rel="stylesheet" type="text/css" href="__ASTYLEURL__css/main.css"/>
+
+    <script type="text/javascript" src="__ASTYLEURL__js/libs/modernizr.min.js"></script>
+</head>
+<body>
+{include file="common/top"}
+<div style="margin: auto;float: left;width: 100%;">
+    {include file="common/left"}
+
+    <!--/sidebar-->
+    <div class="main-wrap">
+
+        <div class="crumb-wrap">
+            <div class="crumb-list"><i class="icon-font"></i><a href="/jscss/admin">首页</a><span
+                    class="crumb-step">&gt;</span><span class="crumb-name">作品管理</span></div>
+        </div>
+        <div class="search-wrap">
+            <div class="search-content">
+                <form action="" method="post">
+                    <table class="search-tab">
+                        <tr>
+                            <th width="120">选择模块:</th>
+                            <td>
+                                <select name="search-sort" id="">
+                                    <option value="">选择</option>
+                                    {volist id='cate' name='cate'}
+                                    <option value="{$cate.id}">{$cate.catename}</option>
+                                    {/volist}
+                                </select>
+                            </td>
+                            <th width="70">关键字:</th>
+                            <td><input class="common-text" placeholder="关键字" name="keywords" value="" id="" type="text">
+                            </td>
+                            <td><input class="btn btn-primary btn2" name="sub" value="查询" type="submit"></td>
+                        </tr>
+                    </table>
+                </form>
+            </div>
+        </div>
+        <div class="result-wrap">
+            <div class="result-title">
+                <div class="result-list">
+                    <a href="{:url('admin/article/add')}"><i class="icon-font"></i>新增作品</a>
+                    <a id="batchDel" href="javascript:void(0)"><i class="icon-font"></i>批量删除</a>
+                    <a id="updateOrd" href="javascript:void(0)"><i class="icon-font"></i>更新排序</a>
+                </div>
+            </div>
+            <div class="result-content">
+                <table class="result-tab" width="100%">
+                    <tr>
+                        <th class="tc" width="5%"><input class="allChoose" name="" type="checkbox"></th>
+                        <th>ID</th>
+                        <th>标题</th>
+                        <th>关键字</th>
+                        <th>点击</th>
+                        <th>发布人</th>
+                        <th>更新时间</th>
+                        <th>模块</th>
+                        <th>缩略图</th>
+                        <th>操作</th>
+                    </tr>
+
+                    {volist name='list' id='article'}
+                    <tr>
+                        <td class="tc"><input name="id[]" value="59" type="checkbox"></td>
+                        <td>{$article.id}</td>
+                        <td title="{$article.title}"><a target="_blank" href="" title="{$article.title}">{$article.title}…</a>
+                        </td>
+                        <td>{$article.keywords}</td>
+                        <td>{$article.click}</td>
+                        <td>{$article.author}</td>
+                        <td>{$article.time}</td>
+                        <td>{$article.cate.catename}</td>
+                        <td><img src="__TP__{$article.pic}" width="80px" height="60px" alt=""></td>
+                        <td>
+                            <a class="link-update" href="{:url('admin/article/art_update')}?id={$article.id}">修改</a>
+                            <a class="link-del" href="{:url('admin/article/del')}?id={$article.id}">删除</a>
+                        </td>
+                    </tr>
+                    {/volist}
+
+                </table>
+                <div class="list-page">{$list->render()}</div>
+            </div>
+        </div>
+    </div>
+    <!--/main-->
+</div>
+</body>
+</html>

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>管理员管理</title>
+    <link rel="stylesheet" type="text/css" href="__ASTYLEURL__css/common.css"/>
+    <link rel="stylesheet" type="text/css" href="__ASTYLEURL__css/main.css"/>
+    <script type="text/javascript" src="__ASTYLEURL__js/libs/modernizr.min.js"></script>
+</head>
+<body>
+{include file="common/top"}
+<div style="margin: auto;float: left;width: 100%;">
+    {include file="common/left"}
+    <div class="main-wrap">
+        <div class="crumb-wrap">
+            <div class="crumb-list"><i class="icon-font"></i><a href="/jscss/admin/design/">首页</a><span
+                    class="crumb-step">&gt;</span><a class="crumb-name" href="/jscss/admin/design/">模块管理</a><span
+                    class="crumb-step">&gt;</span><span>添加模块</span></div>
+        </div>
+        <div class="result-wrap">
+            <div class="result-title">
+                <form action="{:url('admin/article/artmod_update')}" method="post" id="" name=""
+                      enctype="multipart/form-data">
+                    <table class="insert-tab" width="100%">
+                        <tbody>
+                        <tr>
+                            <th><i class="require-red">*</i>模块名：</th>
+                            <td><input class="common-text" name="id" size="50" value="{$artmod.id}" type="hidden">
+                                <input class="common-text" name="catename" size="50" value="{$artmod.catename}" type="text"></td>
+                        </tr>
+                        <tr>
+                            <th>关键词：</th>
+                            <td><input class="common-text" name="keywords" size="50" value="{$artmod.keywords}" type="text"></td>
+                        </tr>
+                        <tr>
+                            <th>简介：</th>
+                            <td><input class="description" name="description" size="50" value="{$artmod.description}" type="text"></td>
+                        </tr>
+                        <tr>
+                            <th></th>
+                            <td>
+                                <input class="btn btn-primary btn6 mr10" value="提交" type="submit">
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </form>
+            </div>
+        </div>
+        <div class="result-content">
+            <div class="list-page"> 1/1 页</div>
+        </div>
+    </div>
+
+</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,124 @@
+<div class="navbar navbar-default navbar-static-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-ex-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand"><img height="20" alt="Brand"
+                                         src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAoCAMAAAC7IEhfAAAA81BMVEX///9VPnxWPXxWPXxWPXxWPXxWPXxWPXz///9hSYT6+vuFc6BXPn37+vz8+/z9/f2LeqWMe6aOfqiTg6uXiK5bQ4BZQX9iS4VdRYFdRYJfSINuWI5vWY9xXJF0YJR3Y5Z4ZZd5ZZd6Z5h9apq0qcW1qsW1q8a6sMqpnLyrn76tocCvpMGwpMJoUoprVYxeRoJjS4abjLGilLemmbrDutDFvdLPx9nX0eDa1OLb1uPd1+Td2OXe2eXh3Ofj3+nk4Orl4evp5u7u7PLv7fPx7/T08vb08/f19Pf29Pj39vn6+fuEcZ9YP35aQn/8/P1ZQH5fR4PINAOdAAAAB3RSTlMAIWWOw/P002ipnAAAAPhJREFUeF6NldWOhEAUBRvtRsfdfd3d3e3/v2ZPmGSWZNPDqScqqaSBSy4CGJbtSi2ubRkiwXRkBo6ZdJIApeEwoWMIS1JYwuZCW7hc6ApJkgrr+T/eW1V9uKXS5I5GXAjW2VAV9KFfSfgJpk+w4yXhwoqwl5AIGwp4RPgdK3XNHD2ETYiwe6nUa18f5jYSxle4vulw7/EtoCdzvqkPv3bn7M0eYbc7xFPXzqCrRCgH0Hsm/IjgTSb04W0i7EGjz+xw+wR6oZ1MnJ9TWrtToEx+4QfcZJ5X6tnhw+nhvqebdVhZUJX/oFcKvaTotUcvUnY188ue/n38AunzPPE8yg7bAAAAAElFTkSuQmCC"></a>
+        </div>
+        <div class="collapse navbar-collapse" id="navbar-ex-collapse">
+            <ul class="nav navbar-left navbar-nav" id="header">
+                <li>
+                    <a href="{:url('admin/index/index')}">首页</a>
+                </li>
+                <li role="presentation" class="dropdown">
+                            <a href="{:url('admin/index/adopt_list')}">领养</a>
+                </li>
+                <li class="">
+                    <a href="{:url('admin/index/lost_list')}">丢失</a>
+                </li>
+                <li class="">
+                    <a href="{:url('admin/index/blog_list')}">文章</a>
+                </li>
+                <li class="">
+                    <a href="{:url('admin/index/activity_list')}">活动</a>
+                </li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <if condition="session('moroselyId')">
+
+                    <div class="navbar-header">
+
+
+                        <li role="presentation" class="dropdown">
+                            <a class="navbar-brand dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true"
+                               aria-expanded="false">
+                                <img class="img-circle" style="height: 30px;width: 30px;" alt="Brand" src="<if condition="session('moroselyPic')">__MOROSELY_THUMB_PIC__<php>echo session('moroselyPic');</php></if>">
+                </a>
+                <ul class="dropdown-menu">
+                    <li class="">
+                        <a href="{:url('index/morosely/show_personalData')}">个人资料</a>
+                    </li>
+
+                    <li role="separator" class="divider"></li>
+                    <li class="">
+                        <a href="{:url('index/morosely/modify_personal_image')}">修改照片</a>
+                    </li>
+                    <li class="">
+                        <a href="{:url('index/morosely/modify_personalDate')}">修改资料</a>
+                    </li>
+                    <li class="">
+                        <a href="{:url('index/morosely/modify_true_name')}">实名认证</a>
+                    </li>
+                    <li class="">
+                        <a href="{:url('index/ublog/add_article')}">发布文章</a>
+                    </li>
+                    <li class="">
+                        <a href="{:url('index/activity/promotional_activity')}">发起活动</a>
+                    </li>
+
+                </ul>
+                </li>
+        </div>
+        <else/>
+
+
+        </if>
+        <li>
+            <a href="{:url('index/index/index')}">前台</a>
+        </li>
+
+        <li>
+            <a href="{:url('admin/index/quite')}">退出登录</a>
+        </li>
+        </ul>
+    </div>
+</div>
+</div>
+
+<script>
+    var url = location.pathname;
+
+    var team = {
+        lost:'lost_list',
+        adopt:'adopt_list',
+        activity:'activity_list',
+        blog:'blog_list',
+        index:'index/index'
+    };
+
+    function getCode() {
+        for (x in team){
+            if (team[x]== url.match(team[x])){
+                return team[x];
+            }
+        }
+    }
+
+    switch (getCode()){
+        case team.index:
+            $('#header>li').eq(0).addClass('active');
+            break;
+
+        case team.adopt:
+            $('#header>li').eq(1).addClass('active');
+            break;
+
+        case team.lost:
+            $('#header>li').eq(2).addClass('active');
+            break;
+        case team.blog:
+            $('#header>li').eq(3).addClass('active');
+            break;
+        case team.activity:
+            $('#header>li').eq(4).addClass('active');
+            break;
+        default:
+            $('#header>li').eq(0).addClass('active');
+            break;
+    }
+</script>

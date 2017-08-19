@@ -1,0 +1,78 @@
+<html>
+<head>
+    <meta name="keywords" content="免费领养  免费领养小狗 免费领养小猫">
+    <meta name="description" content="中国第一个小动物公益网站">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet"
+          type="text/css">
+    <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet"
+          type="text/css">
+    <link href="http://www.getamaster.com/public/static/index/css/demo.css" rel="stylesheet" type="text/css">
+</head>
+<body style="background-color:#eff3f5">
+<include file="common/header" />
+<include file="common/personal_top"/>
+<div class="section">
+    <div class="container">
+        <div class="row" style="padding-bottom: 30px;">
+            <div class="col-lg-offset-1 col-lg-10" style="padding: 20px 0px;">
+                <ul class="nav nav-tabs nav-tabs-lg">
+                    <li role="presentation"><a href="{:url('index/morosely/my_adopt')}">发布的领养</a></li>
+                    <li role="presentation" class="active"><a href="{:url('index/morosely/my_enroll_adopt')}">参与的领养</a></li>
+                    <li role="presentation" class="pull-right"><button onclick="self.location ='www.baidu.com'" class="btn">
+                        <a href="{:url('index/adopt/add_adopt')}">发布领养</a></button></li>
+                </ul>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-offset-1 col-lg-10">
+                <volist name="list" id="list">
+                    <div class="media" style="border-bottom: 1px solid darkgrey;padding: 20px 0px 10px;">
+                        <if condition='$list.images'>
+                        <div class="media-left">
+                            <a href="#">
+                                <div style="overflow: hidden;width: 120px;height: 90px;position: relative;">
+                                    <img class="media-object auto_resp" style="position: absolute;" src="__ADOPT_PIC__{$list.images}" alt="...">
+                                </div>
+                            </a>
+                        </div>
+                        </if>
+                        <div class="media-body">
+                            <h4 class="media-heading">{$list.title}</h4>
+                            <div style="font-size: 14px;">
+                                {$list.note}
+                            </div>
+                        </div>
+                    </div>
+                </volist>
+                <script>
+                    $('.auto_resp').each(function () {
+                        this.height='90';
+                        var lf = -((this.width-120)/2);
+                        $(this).css('margin-left',lf);
+                    })
+                </script>
+            </div>
+
+        </div>
+    </div>
+</div>
+<div class="container">
+    <div class="row">
+        <div class="col-md-4 hidden-sm hidden-xs"></div>
+        <div class="col-md-4">
+            <div class="col-md-12 text-center">
+                <ul class="pagination">
+                    {$page}
+                </ul>
+            </div>
+        </div>
+        <div class="col-md-4 hidden-sm hidden-xs"></div>
+    </div>
+</div>
+<include file="common/footer"/>
+</body>
+</html>

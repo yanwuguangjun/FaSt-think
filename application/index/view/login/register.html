@@ -1,0 +1,161 @@
+<html>
+<head>
+    <meta name="description" content="铲屎官登陆">
+    <title>登录</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script type="text/javascript" src="http://www.getamaster.com/public/static/index/js/jquery.js"></script>
+    <!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
+    <link rel="stylesheet" href="http://www.getamaster.com/public/static/index/css/bootstrap.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-daterangepicker/2.1.25/daterangepicker.css">
+    <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+    <link rel="stylesheet"
+          href="http://www.getamaster.com/public/static/timepicker/bootstrap-datetimepicker.css">
+</head>
+<body>
+<include file="common/header" />
+<div class="section">
+    <div class="container">
+        <div class="row">
+            <div class="hidden-sm hidden-xs section"></div>
+            <div class="col-md-1"></div>
+            <div class="col-md-1"></div>
+            <div class="col-md-5">
+                <form id="form" class="form-horizontal" role="form" action="{:url('index/login/morosely_register')}"
+                      method="post">
+                    <div class="form-group">
+                        <label class="control-label col-sm-3" for="exampleInputEmail1">用户名</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" name="username" id="exampleInputEmail1"
+                                   placeholder="用户名（3-20个字符，字母/中文/下划线/数字）">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-sm-3">选择性别</label>
+                        <div class="radio col-sm-9" style="margin-top: -5px;">
+                            <label class="control-label">
+                                <input type="radio" name="sex" value="1" id="boy">男
+                            </label>
+                            <label class="control-label" style="margin-left:40px;">
+                                <input type="radio" name="sex" value="0" id="girl">女
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-3" for="datetimepicker">出生年月</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" name="birthday" id="datetimepicker" placeholder="选择出生时间">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-3" for="formInput587">邮箱</label>
+                        <div class="col-sm-9">
+                            <input type="email" class="form-control" name="email" id="formInput587" placeholder="邮箱">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-3" for="password">设置密码</label>
+                        <div class="col-sm-9">
+                            <input type="password" class="form-control" id="password" placeholder="设置密码" title=""
+                                   name="password">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-3" for="re_word">确认密码</label>
+                        <div class="col-sm-9">
+                            <input type="password" data-title="俩次密码不一致！且密码不可为空" data-toggle="popover"
+                                   class="form-control" name="re_word" id="re_word" placeholder="重复密码">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-3">验证码</label>
+                        <div class="col-sm-9">
+                            <div class="col-xs-5" style="margin-bottom: 10px;margin-left: -15px;">
+                                <input class="form-control" name="captcha" id="captcha" placeholder="请输入验证码" type="text">
+                            </div>
+                            <div class="col-xs-4" style="margin-left:15px;">
+                                <img id="captcha_img" style="cursor: pointer" src="{:captcha_src()}"
+                                     onclick="this.src='{:captcha_src()}?r'+Math.random()" alt="captcha">
+                            </div>
+                            <div class="col-xs-3">
+                                <a style="text-align: center;line-height: 30px;" href="javascript:;"
+                                   onclick="document.getElementById('captcha_img').src='{:captcha_src()}?r'+Math.random()">换一个</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-3"></label>
+                        <div class="col-sm-9">
+                            <input name="agree" id="agree" type="checkbox" data-title="确认已阅读"
+                                   data-content="“版权声明”和“隐私保护”" data-toggle="popover" value="had_read"/>&nbsp;我已阅读
+                            <a
+                                    style="color: rgb(52, 73, 94); outline: none medium; font-family: 'Microsoft Yahei', 'Helvetica Neue';">《版权声明》</a>和
+                            <a
+                                    style="color: rgb(52, 73, 94); outline: none medium; font-family: 'Microsoft Yahei', 'Helvetica Neue';">《隐私保护》</a>
+
+                        </div>
+                    </div>
+                    <div class="col-sm-3"></div>
+                    <div class="col-sm-9">
+                        <button type="submit" class="btn btn-block btn-info">登录</button>
+                    </div>
+
+                </form>
+            </div>
+            <div class="col-md-4 hidden-xs"></div>
+            <div class="col-md-1 hidden-xs"></div>
+        </div>
+    </div>
+</div>
+<script src="http://www.getamaster.com/public/static/timepicker/datetimepicker.js"></script>
+<script>
+    $(function () {
+        var get_date = new Date();
+        var this_year = get_date.getFullYear();
+        var end_year = this_year - 10;
+        var start_year = get_date.getFullYear() - 75;
+        var month = get_date.getMonth()+1;
+        var month_day = "-" + month + "-" + get_date.getDate();
+        $('#datetimepicker').datetimepicker({
+            minView: "month",
+            startView: 4,
+            startDate: start_year + month_day,
+            endDate: end_year + month_day,
+            autoclose: true,
+            thisYearBtn: false,
+            minuteStep: 10,
+            format: "yyyy-mm-dd"
+        });
+    });
+</script>
+<script>
+    $("form").submit(function (event) {
+        var x = $("#password").val();
+        var y = $("#re_word").val();
+
+        if ($("#agree")[0].checked != true) {
+            event.preventDefault();
+            $("#agree").popover('show');
+        }
+        if (x.length == 0) {
+            event.preventDefault();
+            $("#re_word").popover('show');
+        }
+        if (y.length == 0) {
+            event.preventDefault();
+            $("#re_word").popover('show');
+        }
+        if (x != y) {
+            event.preventDefault();
+            $("#re_word").popover('show');
+        } else {
+            $("button").removeClass("disabled");
+        }
+    });
+</script>
+</body>
+<div class="hidden-sm hidden-xs section"></div>
+<div class="hidden-sm hidden-xs section"></div>
+<div class="hidden-sm hidden-xs section"></div>
+</html>

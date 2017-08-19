@@ -1,0 +1,327 @@
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="http://plugins.krajee.com/assets/6facb0ab/css/fileinput.min.css" rel="stylesheet" type="text/css">
+    <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"
+            integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+            crossorigin="anonymous"></script>
+
+    <script type="text/javascript" src="http://sandbox.runjs.cn/uploads/rs/267/g3ugugjp/area.js"></script>
+    <script type="text/javascript"
+            src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-fileinput/4.3.8/js/fileinput.min.js"></script>
+    <script type="text/javascript" src="http://plugins.krajee.com/assets/6facb0ab/js/locales/zh.js"></script>
+    <link href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet"
+          type="text/css">
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+    <!-- Include external CSS. -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css" rel="stylesheet"
+          type="text/css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.25.0/codemirror.min.css">
+    <!-- Include Editor style. -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/froala-editor/2.5.1/css/froala_editor.pkgd.min.css"
+          rel="stylesheet" type="text/css"/>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/froala-editor/2.5.1/css/froala_style.min.css" rel="stylesheet"
+          type="text/css"/>
+    <!--start darpify-->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/Dropify/0.2.2/css/dropify.css" rel="stylesheet" type="text/css"/>
+
+    <link rel="stylesheet" type="text/css"
+          href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.6.0/sweetalert2.min.css"/>
+</head>
+<body>
+<include file="common/header"/>
+
+<div class="section">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-10">
+                <div class="row">
+                    <div class="col-md-12">
+                        <h1>发布文章</h1>
+                        <ul class="breadcrumb">
+                            <li>
+                                <a href="#">Home</a>
+                            </li>
+                            <li>
+                                <a href="#">Library</a>
+                            </li>
+                            <li class="active">Data</li>
+                        </ul>
+                    </div>
+                </div>
+                <form id="imgForm" action="{:url('index/ublog/save_article')}" method="post"
+                      enctype="multipart/form-data"></form>
+                <form class="form-horizontal" role="form" id="article" action=""
+                      enctype="multipart/form-data" method="post">
+                    <div class="form-group">
+                        <label for="title" class="control-label   col-sm-2">标题</label>
+                        <div class="col-sm-10">
+                            <input type="text" id="title" name="title" class="form-control"
+                                   value="{$draft.title}" placeholder="Placeholder text">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="description" class="control-label   col-sm-2">简介</label>
+                        <div class="col-sm-10">
+                            <input type="text" id="description" name="description" class="form-control"
+                                   value="{$draft.description}" placeholder="Placeholder text">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label   col-sm-2">封面</label>
+                        <div class="col-sm-10">
+                            <input type="file" class="dropify" name="faceImage" id="face_image"
+                                   data-min-width="400" data-default-file="<if condition='$draft.faceImage'>__FACE_IMAGE__{$draft.faceImage}</if>"
+                                   data-allowed-file-extensions="jpg png jpeg"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="content" class="control-label   col-sm-2">内容 </label>
+                        <div class="col-sm-10">
+                                    <textarea typeof="text" id="content" name="content" class="form-control"
+                                              style="height: 100px;" placeholder="相关详细信息">{$draft.content}
+                                    </textarea>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label   col-sm-2"></label>
+                        <div class="col-sm-1">
+                            <button class="btn btn-success" onclick="save()" type="button">保 存
+                            </button>
+                        </div>
+                        <div class="col-sm-2">
+                            <button class="btn btn-success" onclick="put()" id="putin" type="button">提 交
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="col-md-2">
+                <div class="row">
+                    <div class="col-md-12">
+                        <a href="#">
+                            <img src="https://unsplash.imgix.net/photo-1416400453940-65c69d70ad91?w=1024&amp;q=50&amp;fm=jpg&amp;s=54806c1456b35f1d56ca356663d1bdd2"
+                                 class="img-circle img-responsive">
+                        </a>
+                    </div>
+                </div>
+                <div class="section">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="col-md-6">
+                                <ol class="list-unstyled">
+                                    <li>One</li>
+                                    <li>Two</li>
+                                    <li>Three</li>
+                                    <li>One</li>
+                                </ol>
+                            </div>
+                            <div class="col-md-6">
+                                <ol class="list-unstyled">
+                                    <li>One</li>
+                                    <li>Two</li>
+                                    <li>Three</li>
+                                    <li>One</li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/froala-editor/2.5.1/js/froala_editor.min.js"></script>
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/froala-editor/2.5.1/js/plugins/image.min.js"></script>
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/froala-editor/2.5.1/js/languages/zh_cn.js"></script>
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/froala-editor/2.5.1/js/plugins/link.min.js"></script>
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/froala-editor/2.5.1/js/plugins/table.min.js"></script>
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/froala-editor/2.5.1/js/plugins/emoticons.min.js"></script>
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/froala-editor/2.5.1/js/plugins/font_size.min.js"></script>
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/froala-editor/2.5.1/js/plugins/char_counter.min.js"></script>
+<!--start dropify-->
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/Dropify/0.2.2/js/dropify.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.form/4.2.1/jquery.form.min.js"
+        integrity="sha384-tIwI8+qJdZBtYYCKwRkjxBGQVZS3gGozr3CtI+5JF/oL1JmPEHzCEnIKbDbLTCer"
+        crossorigin="anonymous"></script>
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.6.0/sweetalert2.min.js"></script>
+
+<script> $(function () {
+    $('textarea').froalaEditor({
+        toolbarButtons: ['fullscreen', 'print', 'bold', 'italic', 'underline', 'strikeThrough', 'subscript', 'superscript', 'fontFamily', 'fontSize', 'specialCharacters', 'color', 'emoticons', 'inlineStyle', 'paragraphStyle', 'paragraphFormat', 'align', 'formatOL', 'formatUL', 'outdent', 'indent', 'quote', 'insertHR', 'insertLink', 'insertImage', 'insertTable', 'undo', 'redo', 'clearFormatting', 'selectAll', 'html'],
+        toolbarButtonsMD: ['fullscreen', 'bold', 'italic', 'underline', 'fontFamily', 'fontSize', 'color', 'emoticons', 'paragraphStyle', 'paragraphFormat', 'align', 'formatOL', 'formatUL', 'outdent', 'indent', 'quote', 'insertHR', 'insertLink', 'insertImage', 'insertTable', 'undo', 'redo', 'clearFormatting'],   //在大屏幕上显示内容
+        toolbarButtonsSM: ['fullscreen', 'bold', 'italic', 'underline', 'fontFamily', 'fontSize', 'color', 'emoticons', 'paragraphStyle', 'paragraphFormat', 'align', 'formatOL', 'formatUL', 'outdent', 'indent', 'quote', 'insertHR', 'insertLink', 'insertImage', 'insertTable', 'undo', 'redo', 'clearFormatting'],   //在中等屏幕上显示按钮
+        toolbarButtonsXS: ['fullscreen', 'bold', 'italic', 'underline', 'fontFamily', 'fontSize', 'color', 'emoticons', 'paragraphStyle', 'paragraphFormat', 'align', 'formatOL', 'formatUL', 'outdent', 'indent', 'quote', 'insertHR', 'insertLink', 'insertImage', 'insertTable', 'undo', 'redo', 'clearFormatting'],   //在小屏幕上显示按钮
+        // Set the image upload URL.
+        //  '-',表示还行；
+        imageUploadMethod: 'post',
+        imageManagerLoadURL: '',
+        imageUploadURL: 'http://www.getamaster.com/index/getfiles/upload',
+        // Set the image delete URL.
+        imageManagerDeleteURL: 'http://www.getamaster.com/index/getfiles/delete',
+        imageMultipleStyles: true,        //允许上传多文件；
+        imageMaxSize: 1024 * 1024 * 3,   //最大图片大小
+        charCounterCount: true,    //计数器
+        charCounterMax: 3000,      //最大字数 -1 为不限制 默认不限制
+        // videoDefaultDisplay: 'block',
+        tooltips: true,
+        pluginsEnabled: null,
+        language: 'zh_cn',
+        quickInsertButtons: ['image'],
+        heightMin: 400
+    })
+}); </script>
+<script>
+    //封面设置
+    var drEvent = $('#face_image').dropify({
+        tpl: {
+            wrap: '<div class="dropify-wrapper"></div>',
+            loader: '<div class="dropify-loader"></div>',
+            message: '<div class="dropify-message"><span class="file-icon" /> <p>{{ default }}</p></div>',
+            preview: '<div class="dropify-preview"><span class="dropify-render"></span><div class="dropify-infos"><div class="dropify-infos-inner"><p class="dropify-infos-message">{{ replace }}</p></div></div></div>',
+            filename: '<p class="dropify-filename"><span class="file-icon"></span> <span class="dropify-filename-inner"></span></p>',
+            clearButton: '<button type="button" class="dropify-clear">{{ remove }}</button>',
+            errorLine: '<p class="dropify-error">{{ error }}</p>',
+            errorsContainer: '<div class="dropify-errors-container"><ul></ul></div>'
+        },
+        messages: {
+            'default': '点击或拖拽图片到此区域',
+            'replace': '点击或拖拽文件到此区域更换图片',
+            'error': '哎呀！, 什么地方出现问题了.',
+            'remove': '清除'
+        },
+        error: {
+            'fileSize': '图片太大 ({{ value }} max).',
+            'minWidth': '图片过小 ({{ value }}}px min).',
+            'maxWidth': '图片过宽 ({{ value }}}px max).',
+            'minHeight': '图片过低 ({{ value }}}px min).',
+            'maxHeight': '图片过高 ({{ value }}px max).',
+            'imageFormat': 'The image format is not allowed ({{ value }} only).'
+        }
+    });
+</script>
+
+<script>
+    var new_img_src = null;
+    var img_src = null;
+    var img_status =<if condition = "$draft.faceImage" > true <else/>false</if>;        //图片状态 如果是已经上传过的则为true 否则是false
+    var article_data = null;
+    var article_new_data = null;
+    $(function () {                                    //初始化表单数据
+        article_data = $('#article').serialize();      //数据存储
+        article_new_data = article_data;
+        img_src = $('.dropify-render').children().prop('src');
+    });
+
+    function uploadFace() {    //异步上传封面操作
+        $('#face_image').attr('form', 'imgForm');
+        $('#imgForm').ajaxForm({
+            dataType: 'json',
+            success: function (data) {
+                if (data.moroselyId) {
+                    swal('异步上传图片成功!', '', 'success');
+                    img_src = new_img_src;
+                    img_status = true;          //上传成功后保存当前图片状态
+                }
+            }
+        });
+        $('#imgForm').submit();
+    }
+    function getSrc() {
+        mg_src = new_img_src;
+    }
+    function up() {
+//        new_img_src = document.getElementsByClassName('dropify-render').firstChild; //获取最新图状态
+        new_img_src = $('.dropify-render').children().prop('src');
+        if (new_img_src != img_src) uploadFace();
+        getSrc();
+    }
+    setInterval(up, 1000 * 10);                   //定时获取封面的表单
+    drEvent.on('dropify.afterClear', function (event, element) {
+        clear_img();
+    });
+    function clear_img() {
+        new_img_src = null;
+        img_src = null;
+        if (img_status) {
+            $.get("{:url('index/ublog/clear_face_img')}", swal('清除图片成功!', '', 'success'));
+            img_status = false;
+        }
+    }
+
+    $(function () {
+        $('.fr-wrapper').next().remove();                   //简易破解富文本插件
+    });
+
+    function put() {
+        document.getElementById('article').action = "{:url('index/ublog/add_article')}";
+        $('#face_image').attr('form', 'article');                //重新设置封面的form属性
+        $('#article').ajaxForm({
+            dataType: 'json',
+            beforeSubmit: function(arr, $form, options) {
+                $('#putin').text('发表文章中').attr('onclick','javascript:void();');
+            },
+            success: function (data) {
+                if (data=='发布成功！') {
+                    $('#put').text('文章发表成功');
+
+                    swal('发表文章!', '', 'success');
+                    //todo  跳转地址
+                    self.location="{:url('index/index/index')}";
+                    document.getElementById('article').action = null;
+                }
+            }
+        });
+        $('#article').submit();
+        //todo   跳转页面未选定
+        //                self.location = "{:url('index/index/index')}";
+    }
+    setInterval(auto_save, 1000 * 10);                   //定时提交自动保存
+    function auto_save() {
+        article_new_data = $('#article').serialize();
+        if (article_data != $('#article').serialize()) {
+            article_data = $('#article').serialize();
+            save('自动保存成功！');
+        }
+    }
+
+    function save(msg) {
+        var msg = msg || '保存成功！';
+        $.post(
+            "{:url('index/ublog/save_article')}",
+            $('#article').serializeArray(),
+            function (data, status) {
+                if (data.moroselyId)  swal(msg, '', 'success');
+            }
+        );
+    }
+</script>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+

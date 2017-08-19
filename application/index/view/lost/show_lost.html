@@ -1,0 +1,392 @@
+<html wp-site wp-site-is-master-page>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="http://plugins.krajee.com/assets/6facb0ab/css/fileinput.min.css" rel="stylesheet" type="text/css">
+    <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+    <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"
+            integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+            crossorigin="anonymous"></script>
+    <script type="text/javascript"
+            src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-fileinput/4.3.8/js/fileinput.min.js"></script>
+    <script type="text/javascript" src="http://plugins.krajee.com/assets/6facb0ab/js/locales/zh.js"></script>
+    <script type="text/javascript"
+            src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.6.0/sweetalert2.min.js"></script>
+
+    <link href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet"
+          type="text/css">
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+    <link rel="stylesheet" type="text/css"
+          href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.6.0/sweetalert2.min.css"/>
+    <link href="http://www.getamaster.com/public/static/index/css/paper-dashboard.css" rel="stylesheet" type="text/css">
+    <script type="text/javascript" src="http://www.getamaster.com/public/static/area/area.js"></script>
+
+</head>
+<body>
+<include file="common/header" />
+
+<div class="container">
+    <div class="section">
+        <div class="row">
+            <div class="col-md-9">
+                <div class="row article_warp">
+                    <h2>{$lost.title}</h2>
+                    <ul class="breadcrumb">
+                        <li>
+                            <a href="{:url('index/index/index')}">首页</a>
+                        </li>
+                        <li>
+                            <a href="#">new</a>
+                        </li>
+                        <li class="active">{$lost.title}</li>
+                    </ul>
+                    <div class="embed-responsive embed-responsive-16by9" style="min-height: 400px;">
+                        <div class="fr-element fr-view" dir="ltr" aria-disabled="false"
+                             style="min-height: 400px;" spellcheck="true">
+                            <if condition="$lost['images']">
+                                <div class="col-lg-5 col-md-5 col-sm-5 col-xs-6">
+                                    <div id="carousel-example" data-interval="false" class="carousel slide" data-ride="carousel">
+                                        <div class="carousel-inner">
+                                            <if condition = "is_array($lost['images'])">
+                                            <volist name="$lost['images']" id="$lost['images']">
+                                                <div class="item center-block <if condition = '$key == 0'>active</if>">
+                                                    <img style="max-width: 240px;" src="__LOST_PIC__{$lost.images[$key]}">
+                                                    <div class="carousel-caption">
+                                                        <h2>Title</h2>
+                                                        <p>Description</p>
+                                                    </div>
+                                                </div>
+                                            </volist>
+                                                <a class="left carousel-control" href="#carousel-example" data-slide="prev"><i
+                                                        class="icon-prev  fa fa-angle-left"></i></a>
+                                                <a class="right carousel-control" href="#carousel-example" data-slide="next"><i
+                                                        class="icon-next fa fa-angle-right"></i></a>
+                                                <else/>
+                                                <div class="item active">
+                                                    <img style="height: 350px;" src="__LOST_PIC__{$lost.images}">
+                                                    <div class="carousel-caption">
+                                                        <!--<h2>Title</h2>-->
+                                                        <!--<p>Description</p>-->
+                                                    </div>
+                                                </div>
+                                            </if>
+                                        </div>
+                                    </div>
+                                </div>
+                            </if>
+                            <div class="col-lg-7 col-md-5 col-sm-5 col-xs-6">
+                                <div>宠物名：{$lost.masterName}</div>
+                                <div>性别：{$lost.sex}</div>
+                                <div>年龄：{$lost.age}</div>
+                                <div>种类：{$lost.category}</div>
+                                <div>邮箱：{$lost.email}</div>
+                                <div>其它信息：<p>
+                                    {$lost.note}
+                                </p></div>
+                                <div>丢失城市
+                                    <div id="location_text"></div>
+                                </div>
+
+
+                            </div>
+                        </div>
+                        <div id="location" class="form-group has-feedback" style="display: none;">
+                            <label class="control-label col-sm-2">活动地址</label>
+                            <div class="col-lg-2 col-sm-2">
+                                <select name="province" id="location_province" class="form-control" title="省份"></select>
+                            </div>
+                            <div class="col-lg-2 col-sm-2">
+                                <select name="city" id="location_city" class="form-control" title="市"></select>
+                            </div>
+                            <div class="col-lg-2 col-sm-2">
+                                <select name="area" id="location_area" class="form-control" title="区"></select>
+                            </div>
+                            <div class="col-lg-2 col-sm-2">
+                                <select name="town" id="locattion_town" class="form-control" title="街道等"></select>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                        </div>
+                        <div class="col-md-4">
+                            <a href="javascript:void(0)" id="like" onclick="like({$lost.id})" style="color: rgb(138,138,138);">
+                                <i class="fa fa-heart fa-3x success" aria-hidden="true"></i>
+                            </a>
+
+                        </div>
+                        <div class="col-md-4" onclick="enroll()" id="enroll">
+                            <button onclick="" class="btn btn-success">申请领养</button>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-4">
+                            <h3>Column title</h3>
+                        </div>
+                        <div class="col-md-4">
+                            <h3>Column title</h3>
+                        </div>
+                        <div class="col-md-4">
+                            <h3>Column title</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <include file="common/morosely_face"/>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/froala-editor/2.5.1/js/froala_editor.min.js"></script>
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/froala-editor/2.5.1/js/languages/zh_cn.js"></script>
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/froala-editor/2.5.1/js/plugins/emoticons.min.js"></script>
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/froala-editor/2.5.1/js/plugins/char_counter.min.js"></script>
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+
+<script>
+    function floaraEd() {
+        $('textarea').froalaEditor({
+            toolbarButtons: ['fontFamily', 'emoticons'],
+            toolbarButtonsMD: ['fontFamily', 'emoticons'],   //在大屏幕上显示内容
+            toolbarButtonsSM: ['fontFamily', 'emoticons'],   //在中等屏幕上显示按钮
+            toolbarButtonsXS: ['fontFamily', 'emoticons'],   //在小屏幕上显示按钮
+            charCounterCount: true,    //计数器
+            charCounterMax: 140,      //最大字数 -1 为不限制 默认不限制
+            tooltips: true,
+            pluginsEnabled: null,
+            language: 'zh_cn',
+            heightMin: 120
+        });
+        $('.fr-wrapper').next().remove();                   //简易破解富文本插件
+    }
+</script>
+<script>
+    $(function () {
+        floaraEd();   //floara  编辑器
+        if ($.cookie('love_' + {$lost.id}) ==1){  //设置点赞样式
+            $('#like').css('color', '#ff5b62');
+        }
+        if ($.cookie('enroll_adopt_'+{$lost.id})==1) $('#enroll').text('已经报名').attr('onclick', 'javascript:void();');
+    });
+
+
+    //todo 下面这段代码不兼容ie  你后面想办法把！
+    function reply(moroselyId, moroselyName, comment_id, articleId) {
+        var obj = document.activeElement;
+        var reply_document = '<div class="col-xs-2"></div><div class="col-xs-10 pull-right fr-element fr-view">' +
+            '<form role="form" id="reply_form">' +
+            '<div class="form-group">' +
+            '<textarea class="form-control input-sm" name="content" rows="10" style="max-width:730px;max-height:120px;">' +
+            '</textarea>' +
+            '<input type="hidden" name="articleId" value=' + articleId + '>' +
+            '<input type="hidden" name="CTMoroselyId" value=' + moroselyId + '>' +
+            '<input type="hidden" name="CTMoroselyName" value=' + moroselyName + '>' +
+            '<input type="hidden" name="commentId" value=' + comment_id + '>' +
+            '</div>' + '<div class="form-group">' +
+            '<button type="button" onclick="reply_it()" class="btn btn-default pull-right clearfix">回复' +
+            '</button>' + '</div>' + '</form></div>';
+        var rep = document.createElement('div');
+        if (document.getElementById('reply')) {
+            document.getElementById('reply').remove();
+        }
+        rep.id = 'reply';
+        rep.className = 'row';
+        rep.innerHTML = reply_document;
+//        $(this).parent().parent().after(reply_document);
+//        alert('demo');
+
+        obj.parentNode.parentNode.after(rep);
+        floaraEd();
+    }
+    function comment() {
+        $.post("{:url('index/ublog/add_comment')}",
+            $('#comment').serializeArray(),
+            function (data, status) {
+                if (status == 'success') {
+                    create_comment_element(data);
+                    document.getElementById('comment').reset();
+                }
+            }
+        );
+    }
+    function reply_it() {
+        $.post("{:url('index/ublog/reply_comment')}",
+            $("#reply_form").serializeArray(),
+            function (data, status) {
+                if (status == 'success') {
+                    document.getElementById('reply').remove();
+                    create_comment_element(data);
+                }
+            }
+        );
+    }
+    function create_comment_element(data) {
+        if (data.CTMoroselyName) {
+            var come_to_morosely_name = '@' + data.CTMoroselyName;
+        }else {
+            var come_to_morosely_name = "";
+        }
+        var comment_document = '<div class="row">' +
+            '<div class="col-md-12 col-sm-12 col-xs-12 pad25 fr-element fr-view">' +
+            '<div class="row" style = "margin-bottom:20px;" >' +
+            '<div class="col-xs-2 col-md-2 clearfix"><img class="img-circle" src="__MOROSELY_THUMB_PIC__' + data.moroselyPic +
+            '" height="100" width="100" style="margin-top:5px;"/>' +
+            '</div>' +
+            '<div class="col-xs-10">' +
+            '<a href=""><h4>' + data.moroselyName +
+            '</h4></a>' +
+            '<p>' + come_to_morosely_name + data.content + '</p>' +
+            '<a style="margin-right:20px;" onclick ="reply(' +
+            data.moroselyId + ',' + "'" +
+            data.moroselyName + "'" + ',' +
+            data.id + ',' +
+            data.articleId +
+            ')" href="javascript:void(0);">' +
+            '<span class="glyphicon glyphicon-thumbs-up text-center">回复</span></a>' +
+            '<a style="margin-right:20px;">' +
+            '<span class="glyphiconglyphicon-thumbs-up text-center" >回复</span></a>' +
+            '</div>' +
+            '</div>' +
+            '</div>' +
+            '</div>';
+        $("#comment_list").prepend(comment_document);
+        swal('评论成功!', '', 'success');
+    }
+
+    function like(id) {
+        if ($.cookie('love_' + id) != 1) {
+            $.post(
+                "{:url('index/ublog/like')}",
+                {id: id},
+                function (data, status) {
+                    if (data.msg == '点赞成功！') {
+                        $('#like').css('color', '#ff5b62');
+                        $.cookie('love_' + id, 1, {expires: 365});
+                        swal('赞的好！!', '', 'success');
+                    }
+                }
+            );
+        } else {
+            swal('你已经赞过了哦!', '', 'error');
+        }
+
+    }
+</script>
+
+<script>
+    //报名参与领养宠物
+    function enroll() {
+        if ($.cookie('enroll_adopt_' + {$lost.id}) == '1') {
+            $('#enroll').text('已经报名').attr('onclick', 'javascript:void();');
+            return swal('已报名参与领养宠物', '', 'error');
+        }
+        swal.setDefaults({
+            input: 'text',
+            confirmButtonText: 'Next &rarr;',
+            showCancelButton: true,
+            animation: false,
+            progressSteps: ['1', '2', '3']
+        });
+        var steps = [
+            {
+                title: '姓名',
+                text: '仅作为联系使用'
+            },
+            {
+                title: '手机号码',
+                text: '仅作为联系使用'
+            },
+            {
+                title: '是否开车',
+                text: '输入是或者否'
+            }
+        ];
+
+        swal.queue(steps).then(function (result) {
+            swal.resetDefaults();
+            $.post(
+                "{:url('index/adopt/adopt_enroll')}",
+                {
+                    data: JSON.stringify(result),
+                    id: {$lost.id}
+                 },
+            function (data) {
+                if (data.error) {
+                    swal(data.error, '', 'error');
+                    if (data.error == '该账号已申请领养该宝宝！') {
+                        $.cookie('enroll_adopt_' + {$lost.id}, 1, { expires: 365 });
+                        $('#enroll').text('已经报名').attr('onclick', 'javascript:void();');
+                    }
+                } else if (data == '1') {
+                    $.cookie('enroll_adopt_' + {$lost.id}, 1, { expires: 365 });
+                    swal('报名成功！', '', 'success');
+                    $('#enroll').text('已经报名').attr('onclick', 'javascript:void();');
+                }
+            }
+            );
+        }, function () {
+            swal.resetDefaults()
+        })
+    }
+</script>
+<script type="text/javascript">
+    function getOptions(location){
+        var x=document.getElementById(location);
+        var txt="";
+        var i;
+        for (i=0;i<x.length;i++){
+            if(x.options[i].selected) {
+                txt=x.options[i].text;
+            }
+        }
+        return txt;
+    }
+    //    $('#location').hide();
+    $('#location').hide().citys({code:{$lost.location}},function (api) {
+        //将json数据放到页面上来使用的是原来选择地区的js  api
+        $('#location_text').text(getOptions('location_province')+getOptions('location_city')+getOptions('location_area'));
+    }
+
+    );
+    alert(document.getElementById('location_city').value());
+
+    //    var $town = $('#location select[name="town"]');
+    //    var townFormat = function (info) {
+    //        $town.hide().empty();
+    //        if (info['code'] % 1e4 && info['code'] < 7e5) {	//是否为“区”且不是港澳台地区
+    //            $.ajax({
+    //                url: 'http://passer-by.com/data_location/town/' + info['code'] + '.json',
+    //                dataType: 'json',
+    //                success: function (town) {
+    //                    $town.show();
+    //                    for (i in town) {
+    //                        $town.append('<option value="' + i + '">' + town[i] + '</option>');
+    //                    }
+    //                }
+    //            });
+    //        }
+    //    };
+    //    $('#location').citys({
+    //        required: false,
+    //        onChange: function (info) {
+    //            townFormat(info);
+    //        }
+    //    }, function (api) {
+    //        var info = api.getInfo();
+    //        townFormat(info);
+    //    });
+
+</script>
+</body>
+</html>

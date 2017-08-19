@@ -1,0 +1,88 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>后台管理</title>
+    <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.0/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="__ASTYLEURL__css/common.css"/>
+    <link rel="stylesheet" type="text/css" href="__ASTYLEURL__css/main.css"/>
+    <script type="text/javascript" src="__ASTYLEURL__js/libs/modernizr.min.js"></script>
+</head>
+<body>
+{include file="common/top"}
+<div style="margin: auto;float: left;width: 100%;">
+    {include file="common/left"}
+
+    <!--/sidebar-->
+    <div class="main-wrap">
+
+        <div class="crumb-wrap">
+            <div class="crumb-list"><i class="icon-font"></i><a href="/jscss/admin">首页</a><span
+                    class="crumb-step">&gt;</span><span class="crumb-name">作品管理</span></div>
+        </div>
+        <div class="search-wrap">
+            <div class="search-content">
+                <form action="/jscss/admin/design/index" method="post">
+                    <table class="search-tab">
+                        <tr>
+                            <th width="120">选择分类:</th>
+                            <td>
+                                <select name="search-sort" id="">
+                                    <option value="">全部</option>
+                                    <option value="19">精品界面</option>
+                                    <option value="20">推荐界面</option>
+                                </select>
+                            </td>
+                            <th width="70">关键字:</th>
+                            <td><input class="common-text" placeholder="关键字" name="keywords" value="" id="" type="text">
+                            </td>
+                            <td><input class="btn btn-primary btn2" name="sub" value="查询" type="submit"></td>
+                        </tr>
+                    </table>
+                </form>
+            </div>
+        </div>
+        <div class="result-wrap">
+            <form name="myform" id="myform" method="post">
+                <div class="result-title">
+                    <div class="result-list">
+                        <a href="{:url('admin/article/add_artmod')}"><i class="icon-font"></i>模块增加</a>
+                        <a id="batchDel" href="javascript:void(0)"><i class="icon-font"></i>批量删除</a>
+                        <a id="updateOrd" href="javascript:void(0)"><i class="icon-font"></i>更新排序</a>
+                    </div>
+                </div>
+                <div class="result-content">
+                    <table class="result-tab" width="100%">
+                        <tr>
+                            <th class="tc" width="5%"><input class="allChoose" name="" type="checkbox"></th>
+                            <th>ID</th>
+                            <th>模块</th>
+                            <th>简介</th>
+                            <th>关键词</th>
+                            <th>操作</th>
+                        </tr>
+
+                        {volist id='cate' name='list'}
+                        <tr>
+                            <td><input class="allChoose" name="" type="checkbox"></td>
+                            <td>{$cate.id}</td>
+                            <td>{$cate.catename}</td>
+                            <td>{$cate.keywords}</td>
+                            <td>{$cate.description}</td>
+                            <td>
+                                <a class="link-update" href="{:url('admin/article/artmod_update')}?id={$cate.id}">修改</a>
+                                <a class="" href="{:url('admin/article/del_artmod')}?id={$cate.id}">删除</a>
+                            </td>
+                        </tr>
+                        {/volist}
+
+                    </table>
+                    <div class="list-page">{$list->render()}</div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!--/main-->
+</div>
+</body>
+</html>

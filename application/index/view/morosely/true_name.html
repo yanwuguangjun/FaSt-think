@@ -1,0 +1,67 @@
+<html>
+<head>
+    <meta name="keywords" content="免费领养  免费领养小狗 免费领养小猫">
+    <meta name="description" content="中国第一个小动物公益网站">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet"
+          type="text/css">
+    <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet"
+          type="text/css">
+    <link href="http://www.getamaster.com/public/static/index/css/demo.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" type="text/css"
+          href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.6.0/sweetalert2.min.css"/>
+</head>
+<body style="background-color:#eff3f5">
+<include file="common/header" />
+<include file="common/personal_top"/>
+<div class="section">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-offset-1 col-lg-10" style="padding: 20px 0px;">
+                <ul class="nav nav-tabs nav-tabs-lg">
+                    <li role="presentation"><a href="{:url('index/morosely/show_personalData')}">个人资料</a></li>
+                    <li role="presentation" class="active"><a href="{:url('index/morosely/modify_true_name')}">实名认证</a></li>
+                    <li role="presentation" class="pull-right"><button class="btn">
+                        <a href="{:url('index/morosely/modify_personalData')}">编辑资料</a></button></li>
+                    <!--<li role="presentation"><a href="{:url('index/morosely/my_keep_blog')}">收藏</a></li>-->
+                </ul>
+            </div>
+        </div>
+        <div class="row" style="padding: 50px 0;min-height: 400px;">
+            <include file="common/personal_data/true_name"/>
+        </div>
+    </div>
+</div>
+
+<include file="common/footer"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.form/4.2.1/jquery.form.min.js"
+        integrity="sha384-tIwI8+qJdZBtYYCKwRkjxBGQVZS3gGozr3CtI+5JF/oL1JmPEHzCEnIKbDbLTCer"
+        crossorigin="anonymous"></script>
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.6.0/sweetalert2.min.js"></script>
+<script>
+    var data = null;
+    $(function () {
+        data = $('form').serialize();
+    });
+    function put() {
+        var data_now = $('#form').serialize();
+        if (data != data_now) {
+            $('#form').ajaxForm({
+                dataType: 'json',
+                success: function (data) {
+                    if (data) swal('保存实名信息成功!', '', 'success');
+                }
+            });
+            $('#form').submit();
+        }
+        swal('保存实名信息成功!', '', 'success');
+//        self.location=''
+    }
+</script>
+</body>
+</html>
+

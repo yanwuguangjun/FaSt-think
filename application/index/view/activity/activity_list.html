@@ -1,0 +1,74 @@
+<html>
+<head>
+    <meta name="keywords" content="免费领养  免费领养小狗 免费领养小猫">
+    <meta name="description" content="中国第一个小动物公益网站">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet"
+          type="text/css">
+    <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet"
+          type="text/css">
+    <link href="http://www.getamaster.com/public/static/index/css/demo.css" rel="stylesheet" type="text/css">
+</head>
+<body style="background-color:#eff3f5">
+<include file="common/header" />
+<div class="section">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <h2>最近活动</h2>
+            </div>
+        </div>
+        <div class="row">
+            <volist name='list' id='activity'>
+
+                <div class="col-md-3 ar-warp">
+                    <div>
+                        <a href="{:url('index/index/show_activity')}?id={$activity.id}">
+                            <img src="<if condition='$activity.faceImage'>__ACTIVITY_FACE_THUMB__{$activity.faceImage}</if>"
+                                 style="max-height: 160px;width: 262px;" class="img-responsive">
+                        </a>
+                        <h5>
+                            <span class="label label-default">New</span>{$activity.title}</h5>
+                        <ul class="media-list">
+                            <li class="media" style="margin-top: 5px;">
+                                <a class="pull-left" href="#"><img class="img-circle media-object img-responsive" src=""
+                                                                   height="25" width="25"></a>
+                                <div class="media-body">
+                                    <p style="line-height: 25px;">Cras sit amet nibh
+                                        <a href="{:url('index/index/show_activity')}?id={$activity.id}" class="btn btn-info btn-xs pull-right"  style="margin-left: 4px;line-height: 25px;margin-top: 4px;"><i class="fa fa-fw fa-thumbs-up"></i><span
+                                                class="badge"></span></a>
+                                        <a href="{:url('index/index/show_activity')}?id={$activity.id}" class="btn btn-info btn-xs pull-right"  style="margin-left: 4px;line-height: 25px;margin-top: 4px;"><i class="fa fa-fw fa-comments"></i><span
+                                                class="badge"></span></a>
+                                        <!--<a href="{:url('index/index/show_activity')}?id={$activity.id}" class="btn btn-info btn-xs pull-right"  style="margin-left: 4px;line-height: 25px;margin-top: 4px;"><i class="fa fa-fw s fa-weibo"></i><span-->
+                                        <!--class="badge"></span></a>-->
+                                    </p>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </volist>
+        </div>
+    </div>
+</div>
+<div class="section">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4 hidden-sm hidden-xs"></div>
+            <div class="col-md-4">
+                <div class="col-md-12">
+                    <ul class="pagination">
+                        {$page}
+                    </ul>
+                </div>
+            </div>
+            <div class="col-md-4 hidden-sm hidden-xs"></div>
+        </div>
+    </div>
+</div>
+<include file="common/footer"/>
+</body>
+</html>

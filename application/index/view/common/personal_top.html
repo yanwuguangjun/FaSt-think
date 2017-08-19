@@ -1,0 +1,102 @@
+<div class="section">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-offset-5 col-lg-2 text-center">
+                <div style="overflow: hidden;margin-top: 20px;padding-bottom: 30px;" class="">
+                    <a href="">
+                        <img class="img-circle " style="height: 100px;width: 100px;"
+                             src="__MOROSELY_PIC__{$morosely.pic}" alt=""></a></div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="section">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-offset-2 col-lg-8">
+                <div class="btn-group btn-group-justified" role="group" aria-label="">
+                    <div class="btn-group" role="group">
+                        <a href="{:url('index/morosely/my_blog')}">
+                            <button type="button" class="btn btn-default top_bt">我的文章</button>
+                        </a>
+                    </div>
+                    <div class="btn-group" role="group">
+                        <a href="{:url('index/morosely/my_adopt')}">
+                            <button type="button" class="btn btn-default top_bt">我的领养</button>
+                        </a>
+                    </div>
+                    <div class="btn-group" role="group">
+                        <a href="{:url('index/morosely/my_lost')}">
+                            <button type="button" class="btn btn-default top_bt">我的丢失</button>
+                        </a>
+                    </div>
+                    <div class="btn-group" role="group">
+                        <a href="{:url('index/morosely/show_personalData')}">
+                            <button type="button" class="btn btn-default top_bt">个人资料</button>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(function () {
+        var url = location.pathname;
+        var team = {
+            my_adopt: 'my_adopt',
+            my_enroll_adopt: 'my_enroll_adopt',
+            my_blog: 'my_blog',
+            reply_me: 'reply_me',
+            my_lost: 'my_lost',
+            modify_true_name: 'modify_true_name',
+            show_personaldata: 'show_personaldata',
+            modify_personaldata: 'modify_personaldata',
+            personal_data: 'my_enroll_adopt'
+        };
+
+        function getCode() {
+            for (x in team) {
+                if (team[x] == url.match(team[x])) {
+                    return team[x];
+                }
+            }
+        }
+
+        switch (getCode()) {
+            case team.my_adopt:
+                $('.top_bt').eq(1).addClass('active');
+                break;
+
+            case team.my_enroll_adopt:
+                $('.top_bt').eq(1).addClass('active');
+                break;
+
+            case team.my_lost:
+                $('.top_bt').eq(2).addClass('active');
+                break;
+
+            case team.reply_me:
+                $('.top_bt').eq(0).addClass('active');
+                break;
+            case team.my_blog:
+                $('.top_bt').eq(0).addClass('active');
+                break;
+            case team.my_blog:
+                $('.top_bt').eq(0).addClass('active');
+                break;
+            case team.show_personaldata:
+                $('.top_bt').eq(3).addClass('active');
+                break;
+            case team.modify_personaldata:
+                $('.top_bt').eq(3).addClass('active');
+                break;
+            case team.modify_true_name:
+                $('.top_bt').eq(3).addClass('active');
+                break;
+            case team.modify_personal_image:
+                $('.top_bt').eq(3).addClass('active');
+                break;
+        }
+    });
+</script>

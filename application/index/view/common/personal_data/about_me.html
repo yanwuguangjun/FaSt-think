@@ -1,0 +1,33 @@
+<form method="post" id="personData" action="">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="form-group">
+                <label>昵称</label>
+                <input type="text" name="username" class="form-control border-input" placeholder="想让大家叫你什么？"
+                       value="{$moro.username}">
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="form-group">
+                <label>单位名称</label>
+                <input type="text" name="company" class="form-control border-input" placeholder="单位名称"
+                       value="{$moroselyOne.company}">
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="form-group">
+                <label>关于我</label>
+                <textarea style="max-width: 750px;" rows="5" class="form-control border-input" name="maxim"
+                          placeholder="关于你的简介，或人生格言" value="">{$moroselyOne.maxim}</textarea>
+            </div>
+        </div>
+    </div>
+    <div class="text-center">
+        <button type="button" onclick="put()" class="btn btn-info btn-fill btn-wd">保存资料</button>
+    </div>
+    <div class="clearfix"></div>
+</form>

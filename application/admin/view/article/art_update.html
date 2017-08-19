@@ -1,0 +1,142 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>后台管理</title>
+    <link rel="stylesheet" type="text/css" href="__ASTYLEURL__css/common.css"/>
+    <link rel="stylesheet" type="text/css" href="__ASTYLEURL__css/main.css"/>
+
+    <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.0/css/bootstrap-theme.min.css">
+
+    <!--开关按钮样式开始-->
+    <link rel="stylesheet" href="http://www.bootcss.com/p/bootstrap-switch/static/stylesheets/bootstrapSwitch.css">
+    <!--开关按钮样式结束   然而最后没起作用-->
+
+    <!--编辑器样式及插件开始-->
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/static/simditor/styles/simditor.css"/>
+    <script type="text/javascript" src="__PUBLIC__/static/simditor/scripts/jquery.min.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/static/simditor/scripts/module.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/static/simditor/scripts/hotkeys.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/static/simditor/scripts/uploader.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/static/simditor/scripts/simditor.js"></script>
+    <!--编辑器样式及插件结束-->
+
+    <script type="text/javascript" src="__ASTYLEURL__js/libs/modernizr.min.js"></script>
+</head>
+<body>
+{include file="common/top"}
+<div style="margin: auto;float: left;width: 100%;margin-top: -10px;">
+
+    {include file="common/left"}
+    <!--/sidebar-->
+    <div class="main-wrap">
+
+        <div class="crumb-wrap">
+            <div class="crumb-list"><i class="icon-font"></i><a href="/jscss/admin/design/">首页</a><span
+                    class="crumb-step">&gt;</span><a class="crumb-name" href="/jscss/admin/design/">作品管理</a><span
+                    class="crumb-step">&gt;</span><span>新增作品</span></div>
+        </div>
+        <div class="result-wrap">
+            <div class="result-content">
+                <form action="{:url('/admin/article/art_update')}" method="post" id="myform" name="myform"
+                      enctype="multipart/form-data">
+                    <table class="insert-tab" width="100%">
+                        <tbody>
+
+                        <tr>
+                            <th><i class="require-red">*</i>标题：</th>
+                            <td>
+                                <input class="common-text required" id="" name="title" size="50" value="{$article.id}"
+                                       type="text">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th><i class="require-red">*</i>关键字：</th>
+                            <td>
+                                <input class="common-text required" id="" name="keywords" size="50"
+                                       value="{$article.keywords}"
+                                       type="text">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th><i class="require-red">*</i>作者：</th>
+                            <td>
+                                <input class="common-text" name="author" size="50" value="{$article.author}"
+                                       type="text">
+                                <input class="common-text" name="id" size="50" value="{$article.id}" type="hidden">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th><i class="require-red">*</i>简介：</th>
+                            <td><input class="common-text" name="description" size="50" value="{$article.description}"
+                                       type="text">
+                            </td>
+                        </tr>
+
+
+                        <tr>
+                            <th><i class="require-red">*</i>缩略图：</th>
+                            <td><input name="pic" id="" type="file">
+                                <span><img src="__TP__{$article.pic}" height="80px" width="120px" alt=""></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th><i class="require-red">*</i>是否推荐：</th>
+                            <td>
+                                <div class="switch" data-on="primary" data-off="info">
+                                    {if condition="$article['state']==1"}
+                                    <input name="state" id="state" type="checkbox" checked value="$article['state']" />
+                                    {else/}
+                                    <input name="state" id="state" type="checkbox" value="$article['state']" />
+                                    {/if}
+                                </div>
+
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <th><i class="require-red">*</i>模块选择：</th>
+                            <td>
+                                <select name="cateid" id="catid" class="required">
+
+                                    <option value="{$defcate.id}">{$defcate.catename}</option>
+                                    {volist id='cate' name='cate'}
+                                    <option value="{$cate.id}">{$cate.catename}</option>
+                                    {/volist}
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th><i class="require-red">*</i>内容：</th>
+                            <td>
+                                <!--编辑器html开始-->
+                                <textarea id="editor" name="content" placeholder="Balabala·····" autofocus>{$article.content}</textarea>
+                                <!--编辑器html结束-->
+                            </td>
+                        </tr>
+                        <tr>
+                            <th></th>
+                            <td>
+                                <input class="btn btn-primary btn6 mr10" value="提交" type="submit">
+                                <input class="btn btn6" onclick="history.go(-1)" value="返回" type="button">
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </form>
+
+            </div>
+        </div>
+    </div>
+    <!--/main-->
+    <!--编辑器插件开始-->
+    <script>
+        var editor = new Simditor({
+            textarea: $('#editor')
+        });
+    </script>
+    <!--编辑器插件结束-->
+</div>
+</body>
+</html>

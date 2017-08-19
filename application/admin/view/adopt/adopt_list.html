@@ -1,0 +1,149 @@
+<html>
+<head>
+    <meta name="keywords" content="免费领养  免费领养小狗 免费领养小猫">
+    <meta name="description" content="中国第一个小动物公益网站">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet"
+          type="text/css">
+    <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet"
+          type="text/css">
+    <link href="http://www.getamaster.com/public/static/index/css/demo.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" type="text/css"
+          href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.6.0/sweetalert2.min.css"/>
+</head>
+<body>
+<include file="common/header" />
+<div class="section">
+    <div class="container">
+        <div class="row">
+            <div class="row">
+
+            </div>
+            <div class="col-lg-3">
+                <ul class="list-group">
+                    <li class="list-group-item">Cras justo odio</li>
+                </ul>
+            </div>
+            <div class="col-lg-9">
+                <!--<div class="row">-->
+                <!--<h2>Heading</h2>-->
+                <!--</div>-->
+                <div class="row">
+                    <ul class="list-group ">
+                        <volist id="list" name="list">
+                            <li id="{$list.id}" class="list-group-item">
+                                <a href="javascript:;" onclick="see({$list.id})">{$list.title}</a>
+                                <div class="pull-right">
+                                <a href="">{$list.id}</a>
+                                <a  class="btn btn-default btn-sm" onclick="see({$list.id})">查看</a>
+                                <a style="margin-left: 10px;" class="btn btn-default btn-sm" onclick="del_adopt({$list.id})" href="javascritp:;">删除</a>
+                            </div>
+                                <div class="clearfix"></div>
+                            </li>
+                        </volist>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+        <div class="row">
+        </div>
+    </div>
+</div>
+<div class="section">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4 hidden-sm hidden-xs"></div>
+            <div class="col-md-4">
+                <div class="col-md-12">
+                    <ul class="pagination">
+                    </ul>
+                </div>
+            </div>
+            <div class="col-md-4 hidden-sm hidden-xs"></div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.6.0/sweetalert2.min.js"></script>
+<script>
+    function see(id) {
+        $.get(
+            "{:url('admin/index/show_blog')}",
+            {id:id},
+            function (data) {
+                if (data.id){
+                    swal({
+                        title: data.title,
+//                     type: 'info',
+                        html:
+                        'id:'+data.id +
+                        '标题:'+'<div class="row">title</div>'+
+                        '简介:'+data.description+
+                        data.content+
+                        '<a onclick="banner('+data.id+')" class="btn btn-sm btn-default">设为banner</a><a onclick="del_adopt('+data.id+')" class="btn btn-sm btn-default">删除</a>',
+                        showCloseButton: true,
+                        showCancelButton: true,
+                        confirmButtonText:
+                            '<i class="fa fa-thumbs-up"></i>推荐!',
+                        cancelButtonText:
+                            '<i class="fa fa-thumbs-down"></i>'
+                    }).then(function(){
+                        page_one(data.id);
+                    });
+                }
+            }
+        );
+
+    }
+    function banner(id) {
+        $.get(
+            "{:url('admin/index/banner')}",
+            {id:id},
+            function (data,status) {
+                if (data.success){
+                    swal(data.success,'','success');
+                    $('#'+id).remove();
+                }else {
+                    swal(data.error,'','error')
+                }
+
+            }
+        )
+    }
+    function del_adopt(id) {
+        $.get(
+            "{:url('admin/adopt/del_adopt')}",
+            {id:id},
+            function (data,status) {
+                if (data.success){
+                    swal(data.success,'','success');
+                    $('#'+id).remove();
+                }else {
+                    swal(data.error,'','error')
+                }
+
+            }
+        )
+    }
+    function page_one(id) {
+        $.get(
+            "{:url('admin/index/page_one')}",
+            {id:id},
+            function (data,status) {
+                if (data.success){
+                    swal('推荐到首页成功！','','success');
+                    $('#'+id).remove();
+                }else {
+                    swal(data.error,'','error')
+                }
+
+            }
+        )
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,374 @@
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="http://www.getamaster.com/public/static/index/css/demo.css" rel="stylesheet" type="text/css">
+    <link href="http://plugins.krajee.com/assets/6facb0ab/css/fileinput.min.css" rel="stylesheet" type="text/css">
+    <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+    <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"
+            integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+            crossorigin="anonymous"></script>
+    <script type="text/javascript" src="http://www.getamaster.com/public/static/area/area.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.16.0/jquery.validate.min.js"></script>
+    <script src="http://static.runoob.com/assets/jquery-validation-1.14.0/dist/localization/messages_zh.js"></script>     <!-- validate中文插件-->
+    <script type="text/javascript"
+            src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-fileinput/4.3.8/js/fileinput.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/froala-editor/2.5.1/css/plugins/char_counter.min.css"
+          rel="stylesheet" type="text/css"/>
+    <script type="text/javascript" src="http://plugins.krajee.com/assets/6facb0ab/js/locales/zh.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/froala-editor/2.5.1/css/froala_editor.min.css"
+          rel="stylesheet" type="text/css"/>
+    <link href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet"
+          type="text/css">
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/froala-editor/2.5.1/css/froala_style.min.css" rel="stylesheet"
+          type="text/css"/>
+
+    <link rel="stylesheet" type="text/css"
+          href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.6.0/sweetalert2.min.css"/>
+<style>
+    .error{color: red}
+</style>
+</head>
+<body>
+<include file="common/header" />
+
+<div class="section">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-10">
+                <div class="row">
+                    <div class="col-md-12">
+                        <h3>发布领养</h3>
+                        <ul class="breadcrumb">
+                            <li>
+                                <a href="{:url('index/index/index')}">首页</a>
+                            </li>
+                            <li>
+                                <a href="#">领养</a>
+                            </li>
+                            <li class="active">发布领养</li>
+                        </ul>
+                    </div>
+                </div>
+                <form class="form-horizontal" id="form" enctype="multipart/form-data" action="{:url('index/adopt/add_adopt')}" method="post">
+                    <div class="form-group">
+                        <label class="control-label col-sm-2">标题</label>
+                        <div class="col-sm-10">
+                            <input name="title" title="" class="form-control" id="title"  placeholder="5-20字标题">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-2">种类</label>
+                        <div class="col-sm-5">
+                            <select name="species" title="物种" class="form-control" id="species">
+                            </select>
+                        </div>
+                        <div class="col-sm-5">
+                            <select name="category" title="种类" class="form-control" id="lei">
+                            </select>
+                        </div>
+                    </div>
+                    <script>
+                        $(function () {
+                            var species = document.getElementById('species');
+                            var leis = document.getElementById('lei');
+                            //todo  此处优化数据库后  此处从数据库查询ok？
+                            var spe_arr = ['选择物种', '狗狗', '猫咪'];
+                            var class_arr = [
+                                ["选择类别"],
+                                ["斗牛犬", "牛头梗", "拉布拉多犬"],
+                                ["蓝眼猫", "猎猫", "菜瓜猫"]
+                            ];
+                            var apeNum = spe_arr.length;
+                            var number = species.length;
+                            if (number < 1) {
+                                for (var i = 0; i < apeNum; i++) {
+                                    var spe = new Option(spe_arr[i], spe_arr[i]);
+                                    species.options.add(spe);
+                                }
+                            }
+                            species.onchange = function () {
+                                if (species.selectedIndex) {
+                                    $("#lei>option").remove();
+                                    for (var i = 0; i < apeNum; i++) {
+                                        var index = species.selectedIndex;
+                                        var lei = new Option(class_arr[index][i]);
+                                        leis.options.add(lei);
+                                    }
+                                }else { $("#lei>option").remove();}
+
+                            }
+                        })
+                    </script>
+                    <div class="form-group">
+                        <label for="age" class="control-label  col-sm-2">大小 </label>
+                        <div class="col-sm-10">
+                            <select name="age" class="form-control" id="age">
+                                <option value="1">哺乳期</option>
+                                <option value="2">3-5个月</option>
+                                <option value="3">6-10个月</option>
+                                <option value="4">1岁-2岁</option>
+                                <option value="5">2-6岁</option>
+                                <option value="6">7-13岁</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="sex" class="control-label  col-sm-2">性别</label>
+                        <div class="col-sm-10">
+                            <select name="sex" id="sex" class="form-control">
+                                <option value="1">公</option>
+                                <option value="2">母</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="note" class="control-label  col-sm-2">备注 </label>
+                        <div class="col-sm-10">
+                            <textarea typeof="text" id="note" name="note" class="form-control" style="height: 100px;"
+                                      placeholder="相关详细信息"></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-2">上传图片</label>
+                        <div class="col-sm-10">
+                            <input id="input-25" name="images[]" type="file" class="file-loading" multiple  placeholder="上传1-9张图片">
+                        </div>
+                    </div>
+                    <script>
+                        $(document).on('ready', function () {
+                            $("#input-25").fileinput({
+                                overwriteInitial: true,
+                                language: "zh",
+                                uploadUrl: "...",
+                                maxFileCount: 9,
+                                minFileCount: 1,
+                                showUpload: false,
+                                dropZoneEnabled: false,
+                                allowedFileExtensions: ["jpg", "gif", "png", "jpeg"]
+                            });
+                        });
+                    </script>
+
+                    <div class="form-group has-feedback">
+                        <label for="inputEmail3" class="control-label col-sm-2">联系邮箱 </label>
+                        <div class="col-sm-10">
+                            <input type="email" class="form-control" name="email" id="inputEmail3" placeholder="请输入邮箱">
+                        </div>
+                    </div>
+                    <div class="form-group has-feedback" id="location">
+                        <label for="inputEmail3" class="control-label col-sm-2">所在位置或地址</label>
+                        <div class="col-lg-2 col-sm-2">
+                            <select name="province" class="form-control" title="省份"></select>
+                        </div>
+                        <div class="col-lg-2 col-sm-2">
+                            <select name="city" class="form-control" title="市"></select>
+                        </div>
+                        <div class="col-lg-2 col-sm-2">
+                            <select name="area" class="form-control" title="区"></select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label  col-sm-2">手机</label>
+                        <div class="col-sm-10">
+                            <input type="tel" name="tel" class="form-control"  placeholder="联系人手机电话">
+                        </div>
+                        <div class="col-sm-offset-2 col-sm-8">
+                            <div class="checkbox">
+                                <label class="checkbox-inline">
+                                    <input type="checkbox" name="open" value="yes">是否公开电话</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label  col-sm-2">验证码</label>
+                        <div class="col-sm-4">
+                            <input class="form-control" name="captcha" id="captcha" placeholder="请输入验证码" type="text">
+                        </div>
+                        <div class="col-sm-2">
+                            <img id="captcha_img" style="cursor: pointer;margin-left: -105px;" src="{:captcha_src()}" onclick="this.src='{:captcha_src()}?r'+Math.random()" alt="captcha" class="pull-right">
+                        </div>
+                        <div class="col-sm-2">
+                            <a style="text-align: center;line-height: 30px;" href="javascript:;" onclick="document.getElementById('captcha_img').src='{:captcha_src()}?r'+Math.random()">换一个</a>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-2"></label>
+                        <div class="col-sm-10">
+                            <input name="agree" id="agree" type="checkbox" data-title="确认已阅读"
+                                   data-content="“版权声明”和“隐私保护”" data-toggle="popover" value="yes"/>&nbsp;我已阅读
+                            <a
+                                    style="color: rgb(52, 73, 94); outline: none medium; font-family: 'Microsoft Yahei', 'Helvetica Neue';">《版权声明》</a>和
+                            <a
+                                    style="color: rgb(52, 73, 94); outline: none medium; font-family: 'Microsoft Yahei', 'Helvetica Neue';">《隐私保护》</a>
+
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-offset-2 col-sm-10">
+                            <button type="button" onclick="up()" class="btn btn-success">提 交</button>
+                        </div>
+                    </div>
+                    <script>
+
+                        $(function () {
+                            $("#form").validate({
+                                //图片单独验证
+                                rules:{
+                                    title:{
+                                        required:true,
+                                        maxlength:20
+                                    },
+                                    species:"required",
+                                    category:"required",
+                                    age:"required",
+                                    sex:"required",
+                                    note:{
+                                        required:false,
+                                        maxlength:140
+                                    },
+                                    images:{
+                                        required:true,
+                                        minlength:1,
+                                        maxlength:9
+                                    },
+                                    email:{
+                                        required:true,
+                                        email:true
+                                    },
+                                    province: "required",
+                                    city: "required",
+                                    area: "required",
+                                    tel: {
+                                        required: true,
+                                        digits: true
+                                    },
+                                    captcha: "required",
+                                    agree: "required"
+                                },
+                                messages:{
+                                    title:{
+                                        required:"必须填写标题",
+                                        maxlength:"标题长度不得长于20"
+                                    },
+                                    agree:"确认阅读发布领养须知",
+                                    species:"请选择种类",
+                                    category:"请选择种类",
+                                    captcha:"验证码必须填写",
+                                    tel:"联系人手机号必须填写"
+
+                                }
+                            })
+                        })
+                    </script>
+                </form>
+            </div>
+            <div class="col-md-2">
+                <div class="row">
+                    <div class="col-md-12">
+                        <a href="#"><img
+                                src="https://unsplash.imgix.net/photo-1416400453940-65c69d70ad91?w=1024&amp;q=50&amp;fm=jpg&amp;s=54806c1456b35f1d56ca356663d1bdd2"
+                                class="img-circle img-responsive"></a>
+                    </div>
+                </div>
+                <div class="section">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="col-md-6">
+                                <ol class="list-unstyled">
+                                    <li>One</li>
+                                    <li>Two</li>
+                                    <li>Three</li>
+                                    <li>One</li>
+                                </ol>
+                            </div>
+                            <div class="col-md-6">
+                                <ol class="list-unstyled">
+                                    <li>One</li>
+                                    <li>Two</li>
+                                    <li>Three</li>
+                                    <li>One</li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<include file="common/footer"/>
+
+</body>
+
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/froala-editor/2.5.1/js/froala_editor.min.js"></script>
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/froala-editor/2.5.1/js/languages/zh_cn.js"></script>
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/froala-editor/2.5.1/js/plugins/char_counter.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.form/4.2.1/jquery.form.min.js"
+        integrity="sha384-tIwI8+qJdZBtYYCKwRkjxBGQVZS3gGozr3CtI+5JF/oL1JmPEHzCEnIKbDbLTCer"
+        crossorigin="anonymous"></script>
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.6.0/sweetalert2.min.js"></script>
+<script>
+//    var $town = $('#location select[name="town"]');
+//    var townFormat = function (info) {
+//        $town.hide().empty();
+//        if (info['code'] % 1e4 && info['code'] < 7e5) {	//是否为“区”且不是港澳台地区
+//            $.ajax({
+//                url: 'http://passer-by.com/data_location/town/' + info['code'] + '.json',
+//                dataType: 'json',
+//                success: function (town) {
+//                    $town.show();
+//                    for (i in town) {
+//                        $town.append('<option value="' + i + '">' + town[i] + '</option>');
+//                    }
+//                }
+//            });
+//        }
+//    };
+    $('#location').citys({
+        required: false,
+        onChange: function (info) {
+            townFormat(info);
+        }
+    }, function (api) {
+        var info = api.getInfo();
+        townFormat(info);
+    });
+
+
+    $('textarea').froalaEditor({
+        toolbarButtons: ['fontFamily'],
+        toolbarButtonsMD: ['fontFamily'],   //在大屏幕上显示内容
+        toolbarButtonsSM: ['fontFamily'],   //在中等屏幕上显示按钮
+        toolbarButtonsXS: ['fontFamily'],   //在小屏幕上显示按钮
+        charCounterCount: true,    //计数器
+        charCounterMax: 140,      //最大字数 -1 为不限制 默认不限制
+        tooltips: true,
+        pluginsEnabled: null,
+        language: 'zh_cn',
+        heightMin: 120
+    });
+    $('.fr-wrapper').next().remove();                   //简易破解富文本插件
+
+    function up() {
+        $('form').ajaxForm({
+            dataType:'json',
+            success:function (data) {
+                if (data.error){
+                    swal(data.error, '', 'error');
+                }else if (data.id){
+                    swal('发布成功!', '', 'success');
+                    self.location="{:url('index/index/index')}";
+                }
+            }
+        });
+        $('form').submit();
+    }
+</script>
+</html>
