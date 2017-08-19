@@ -1,3 +1,4 @@
+<?php if (!defined('THINK_PATH')) exit(); /*a:1:{s:71:"/mnt/hgfs/html/FaSt-think/application/index/view/index/socket_test.html";i:1503123420;}*/ ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -30,7 +31,7 @@
     </div>
 </div>
 <div class="right">
-    <form id="login" method="post" action="{:url('index/index/swoole_login')}">
+    <form id="login" method="post" action="<?php echo url('index/index/swoole_login'); ?>">
         <div><input type="text" name="username" id="username" value="username"></div>
         <div><input type="text" name="password" id="password" value="password"></div>
         <div>

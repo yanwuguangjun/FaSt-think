@@ -34,15 +34,15 @@ class WebSocket extends Common
 
     protected $token;
 
+    protected static $all_user;
+
+    protected static $room;
+
     public function init()
     {
         $this->redis = new Client(Config::get('redis'));
     }
 
-//    public function redis(){
-//        if ()
-//        return
-//    }
 
     //命令行配置函数
     protected function configure()
@@ -62,6 +62,19 @@ class WebSocket extends Common
             'daemonize' => false,
             'max_request' => 2000,
         ]);
+
+        //所有人表
+        self::$all_user = new \swoole_table(1048576); //2的100次方个
+        self::$all_user->column('fd',\swoole_table::TYPE_INT,8);
+        self::$all_user->column('username',\swoole_table::TYPE_STRING,32);
+        self::$all_user->column('token',\swoole_table::TYPE_STRING,64);
+        self::$all_user->create();
+
+        //所有的聊天室
+        self::$room = new \swoole_table(1048576);
+        self::$room->column('fd',\swoole_table::TYPE_INT,8);
+        self::$room->column('username',\swoole_table::TYPE_STRING,32);
+        self::$room->create();
 
         $this->server->on('Start', [$this, 'onStart']);
 
@@ -128,21 +141,23 @@ class WebSocket extends Common
 
                 $username = $data[0];
 
-                if ($this->redis->hget($username, 'token') == $frame->data) {
+                if ($this->redis->hget($username, 'token') == $this->token) {
 
                     //存储用户信息
-                    $hash = array('fd' => $frame->fd, 'online' => true, 'token' => $frame->data);
+                    $hash = array('fd' => $request->fd, 'online' => true, 'token' => $this->token);
                     $this->redis->hmset($username, $hash);
 
 
-                    //存储id信息
-                    $fd_array = ['username' => $username, 'token' => $frame->data];
-                    $this->redis->hmset($frame->fd, $fd_array);
+                    //存储id信息 fd=>user
+                    $fd_array = ['username' => $username, 'token' => $this->token];
+
+                    $this->redis->hmset($request->fd, $fd_array);
                 }
 
             } else unset($data);
 
             //存储当前id
+
             //添加id到room1
             $this->redis->hset('room1', $request->fd, $request->fd);
 
@@ -166,7 +181,6 @@ class WebSocket extends Common
         echo "message form {$frame->fd}:{$frame->data},opcode:{$frame->opcode},fin:{$frame->finish}\n";
 
         if ($this->redis instanceof Client) {
-
 
 
         } else echo 'redis-error' . __LINE__;
