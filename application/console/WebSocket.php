@@ -34,9 +34,10 @@ class WebSocket extends Common
 
     protected $token;
 
-    protected static $all_user;
+    protected $all_user;
 
-    protected static $room;
+    protected $room;
+
 
     public function init()
     {
@@ -64,17 +65,32 @@ class WebSocket extends Common
         ]);
 
         //所有人表
-        self::$all_user = new \swoole_table(1048576); //2的100次方个
-        self::$all_user->column('fd',\swoole_table::TYPE_INT,8);
-        self::$all_user->column('username',\swoole_table::TYPE_STRING,32);
-        self::$all_user->column('token',\swoole_table::TYPE_STRING,64);
-        self::$all_user->create();
+        /**
+         * $fd=>
+         */
+
+        $this->all_user = new \swoole_table(1048576); //2的100次方个
+        $this->all_user->column('fd',\swoole_table::TYPE_INT,8);
+        $this->all_user->column('username',\swoole_table::TYPE_STRING,32);
+        $this->all_user->column('token',\swoole_table::TYPE_STRING,64);
+        $this->all_user->create();
+
 
         //所有的聊天室
-        self::$room = new \swoole_table(1048576);
-        self::$room->column('fd',\swoole_table::TYPE_INT,8);
-        self::$room->column('username',\swoole_table::TYPE_STRING,32);
-        self::$room->create();
+        /**
+         * $room_id=>[
+         *          room_id=>room_id,
+         *          admin_user=>admin_user
+         *          ]
+         */
+
+        $this->room = new \swoole_table(1048576);
+        $this->room->column('room_id',\swoole_table::TYPE_INT,8);
+        $this->room->column('admin_user',\swoole_table::TYPE_STRING,32);
+        $this->room->create();
+
+
+
 
         $this->server->on('Start', [$this, 'onStart']);
 
@@ -132,7 +148,6 @@ class WebSocket extends Common
 
         $this->token = $request->get['token'];
 
-
         if ($this->redis instanceof Client) {
 
             $data = explode('__', $this->token);
@@ -152,6 +167,13 @@ class WebSocket extends Common
                     $fd_array = ['username' => $username, 'token' => $this->token];
 
                     $this->redis->hmset($request->fd, $fd_array);
+
+                    //存进fd到所有用户内存表
+
+                    if ($this->all_user instanceof \swoole_table){
+                        $array = array('fd'=>$request->fd,'username'=>$username,'token'=>$this->token;
+                        $this->all_user->set()
+                    }
                 }
 
             } else unset($data);
@@ -213,9 +235,14 @@ class WebSocket extends Common
             $this->redis->hdel('room1', $fd);
 
             //广播推出信息
-            foreach ($this->redis->hkeys('room1') as $hkey) {
-                $server->push($hkey, '小伙伴' . $fd . '退出聊天室');
+
+            foreach ($this->all_user as $item) {
+                $server->push($item,'小伙伴'.$item['fd'].'退出聊天室');
             }
+
+//            foreach ($this->redis->hkeys('room1') as $hkey) {
+//                $server->push($hkey, '小伙伴' . $fd . '退出聊天室');
+//            }
             echo 'clear', $fd;
         } else echo 'redis-error' . __LINE__;
 
