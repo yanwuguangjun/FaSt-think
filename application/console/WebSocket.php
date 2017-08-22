@@ -42,6 +42,7 @@ class WebSocket extends Common
     public function init()
     {
         $this->redis = new Client(Config::get('redis'));
+
     }
 
 
@@ -70,9 +71,9 @@ class WebSocket extends Common
          */
 
         $this->all_user = new \swoole_table(1048576); //2的100次方个
-        $this->all_user->column('fd',\swoole_table::TYPE_INT,8);
-        $this->all_user->column('username',\swoole_table::TYPE_STRING,32);
-        $this->all_user->column('token',\swoole_table::TYPE_STRING,64);
+        $this->all_user->column('fd', \swoole_table::TYPE_INT, 8);
+        $this->all_user->column('username', \swoole_table::TYPE_STRING, 32);
+        $this->all_user->column('token', \swoole_table::TYPE_STRING, 64);
         $this->all_user->create();
 
 
@@ -85,11 +86,9 @@ class WebSocket extends Common
          */
 
         $this->room = new \swoole_table(1048576);
-        $this->room->column('room_id',\swoole_table::TYPE_INT,8);
-        $this->room->column('admin_user',\swoole_table::TYPE_STRING,32);
+        $this->room->column('room_id', \swoole_table::TYPE_INT, 8);
+        $this->room->column('admin_user', \swoole_table::TYPE_STRING, 32);
         $this->room->create();
-
-
 
 
         $this->server->on('Start', [$this, 'onStart']);
@@ -160,6 +159,7 @@ class WebSocket extends Common
 
                     //存储用户信息
                     $hash = array('fd' => $request->fd, 'online' => true, 'token' => $this->token);
+
                     $this->redis->hmset($username, $hash);
 
 
@@ -168,11 +168,14 @@ class WebSocket extends Common
 
                     $this->redis->hmset($request->fd, $fd_array);
 
-                    //存进fd到所有用户内存表
 
-                    if ($this->all_user instanceof \swoole_table){
-                        $array = array('fd'=>$request->fd,'username'=>$username,'token'=>$this->token;
-                        $this->all_user->set()
+                    //存进fd到所有用户内存表 fd=>$array
+                    if ($this->all_user instanceof \swoole_table) {
+
+                        $array = array('fd' => $request->fd, 'username' => $username, 'token' => $this->token);
+
+                        $this->all_user->set($request->fd, $array);
+
                     }
                 }
 
@@ -186,9 +189,11 @@ class WebSocket extends Common
             $room = $this->redis->hkeys('room1');
 
 
-            //循环广播
+            //room 循环广播
             foreach ($room as $item) {
+
                 $server->push($item, '新小伙伴' . $request->fd . '加入聊天室');
+
             }
 
 
@@ -200,10 +205,51 @@ class WebSocket extends Common
     public function onMessage(\swoole_websocket_server $server, \swoole_websocket_frame $frame)
     {
 
+        //$data 0__$user__$massage      //protect
+        //$data 1__$room__$massage      //room
+        //$data 2__all_user__$massage  //all_user
+
         echo "message form {$frame->fd}:{$frame->data},opcode:{$frame->opcode},fin:{$frame->finish}\n";
 
-        if ($this->redis instanceof Client) {
+        $data = explode('__', $frame->data);
+        $type = $data[0];
+        $id = $data[1];
+        $massage = $data[2];
 
+        switch ($type) {
+            //私聊
+            case 0:
+
+            case 1:
+
+            case 2:
+                if ($id == 'all_user') {
+                    if ($this->all_user instanceof \swoole_table)
+                        foreach ($this->all_user->get())
+                }
+        }
+
+        if ($type === 0) {
+            //私聊
+            $server->push()
+        } elseif ($type === 1) {
+            //聊天室
+            $room_id = $id;
+
+
+            foreach () {
+
+            }
+
+        } elseif ($type === 2) {
+            //群发
+            if ($id == 'all_user') {
+                $server->push($frame->fd, $frame->fd . 'say hello everybody!我这是群发！');
+            }
+        }
+
+
+        if ($this->redis instanceof Client) {
 
         } else echo 'redis-error' . __LINE__;
 
@@ -237,7 +283,7 @@ class WebSocket extends Common
             //广播推出信息
 
             foreach ($this->all_user as $item) {
-                $server->push($item,'小伙伴'.$item['fd'].'退出聊天室');
+                $server->push($item, '小伙伴' . $item['fd'] . '退出聊天室');
             }
 
 //            foreach ($this->redis->hkeys('room1') as $hkey) {

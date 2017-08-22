@@ -76,6 +76,9 @@ class Index extends Common
         return $data['password'] == $connect->hget($data['username'], 'password') ? su($connect, $data) : json(['error' => '用户名或密码错误！']);
     }
 
+
+
+
     //首页
     public function index()
     {
