@@ -20,7 +20,9 @@ use \swoole\server;
 use Predis\Client;
 use think\Config;
 use think\Controller;
+use think\Db;
 use think\Session;
+use app\console\TB;
 
 class WebSocket extends Common
 {
@@ -73,6 +75,7 @@ class WebSocket extends Common
         $this->all_user = new \swoole_table(1048576); //2的100次方个
         $this->all_user->column('fd', \swoole_table::TYPE_INT, 8);
         $this->all_user->column('username', \swoole_table::TYPE_STRING, 32);
+        $this->all_user->column('id', \swoole_table::TYPE_STRING, 16);
         $this->all_user->column('token', \swoole_table::TYPE_STRING, 64);
         $this->all_user->create();
 
@@ -215,38 +218,35 @@ class WebSocket extends Common
         $type = $data[0];
         $id = $data[1];
         $massage = $data[2];
+        $fd = $frame->fd;
 
         switch ($type) {
             //私聊
             case 0:
+                if ($this->redis instanceof Client) {
 
-            case 1:
+                    $object_fd = $this->redis->hget($id, 'fd');
 
-            case 2:
+                    $all_user = TB::getInstance($this->all_user);
+                    Db::
+                    TB::get()
+//                    $all_user->get()
+
+                    $server->push($object_fd, $massage);
+                }
+
+
+                break;
+            case 1: //聊天室
+
+            case 2:  //群发
+
                 if ($id == 'all_user') {
                     if ($this->all_user instanceof \swoole_table)
                         foreach ($this->all_user->get())
                 }
         }
 
-        if ($type === 0) {
-            //私聊
-            $server->push()
-        } elseif ($type === 1) {
-            //聊天室
-            $room_id = $id;
-
-
-            foreach () {
-
-            }
-
-        } elseif ($type === 2) {
-            //群发
-            if ($id == 'all_user') {
-                $server->push($frame->fd, $frame->fd . 'say hello everybody!我这是群发！');
-            }
-        }
 
 
         if ($this->redis instanceof Client) {
