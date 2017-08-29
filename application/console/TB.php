@@ -12,35 +12,22 @@ use app\console\Common;
 
 class TB extends Common
 {
-    protected $table;
 
-    protected function __construct($name)
+
+    private function __construct($name)
     {
 
     }
 
     public static function getInstance($name)
     {
-        if (!$name instanceof \swoole_table) {
-            $name = new \swoole_table();
+        if ($name instanceof \swoole_table) {
+
+            return $name;
+
         }
         return $name;
     }
 
-    public static function get($key)
-    {
-        $obj = self::getInstance();
 
-        return $obj->get($key);
-    }
-//
-//    public static function set()
-//    {
-//
-//    }
-//
-//    public static function del()
-//    {
-//
-//    }
 }

@@ -9,20 +9,13 @@
 namespace app\console;
 
 //命令行核心
-use think\console\Command;
-//核心
-use think\console\Input;
-//核心
-use think\console\Output;
-
-use app\console\Common;
-use \swoole\server;
 use Predis\Client;
 use think\Config;
-use think\Controller;
-use think\Db;
-use think\Session;
-use app\console\TB;
+use think\console\Input;
+use think\console\Output;
+
+//核心
+//核心
 
 class WebSocket extends Common
 {
@@ -34,19 +27,73 @@ class WebSocket extends Common
     //redis 连接
     protected $redis;
 
-    protected $token;
-
     protected $all_user;
 
     protected $room;
 
+    protected $all_fd;
+
+    public static $demo;
 
     public function init()
     {
-        $this->redis = new Client(Config::get('redis'));
+
 
     }
 
+    public function __construct()
+    {
+
+        //所有人表
+        /**
+         * user_id=>[
+         *  'fd'=>'fd',
+         *  'username'=>'username',
+         *  'id'=>'id',
+         *  'token'=>'token'
+         * ]
+         */
+
+        if (!$this->all_user instanceof \swoole_table) {
+            $this->all_user = new \swoole_table(1048576); //2的100次方个
+            $this->all_user->column('fd', \swoole_table::TYPE_INT, 8);
+            $this->all_user->column('username', \swoole_table::TYPE_STRING, 32);
+            $this->all_user->column('id', \swoole_table::TYPE_STRING, 16);
+            $this->all_user->column('token', \swoole_table::TYPE_STRING, 64);
+            $this->all_user->create();
+        }
+
+        /**
+         * 所有人fd表
+         */
+        if (!$this->all_fd instanceof \swoole_table) {
+            $this->all_fd = new \swoole_table(1048576);
+            $this->all_fd->column('fd', \swoole_table::TYPE_INT, 8);
+            $this->all_fd->column('id', \swoole_table::TYPE_INT, 16);
+            $this->all_fd->column('username', \swoole_table::TYPE_STRING, 32);
+            $this->all_fd->create();
+        }
+
+
+        //所有的聊天室
+        /**
+         * $room_id=>[
+         *          room_id=>room_id,
+         *          admin_user=>admin_user
+         *          ]
+         */
+        if (!$this->room instanceof \swoole_table) {
+            $this->room = new \swoole_table(1048576);
+            $this->room->column('room_id', \swoole_table::TYPE_INT, 8);
+            $this->room->column('admin_user', \swoole_table::TYPE_STRING, 32);
+            $this->room->create();
+        }
+
+        if (!$this->redis instanceof Client) {
+            $this->redis = new Client(Config::get('redis'));
+        }
+
+    }
 
     //命令行配置函数
     protected function configure()
@@ -66,32 +113,6 @@ class WebSocket extends Common
             'daemonize' => false,
             'max_request' => 2000,
         ]);
-
-        //所有人表
-        /**
-         * $fd=>
-         */
-
-        $this->all_user = new \swoole_table(1048576); //2的100次方个
-        $this->all_user->column('fd', \swoole_table::TYPE_INT, 8);
-        $this->all_user->column('username', \swoole_table::TYPE_STRING, 32);
-        $this->all_user->column('id', \swoole_table::TYPE_STRING, 16);
-        $this->all_user->column('token', \swoole_table::TYPE_STRING, 64);
-        $this->all_user->create();
-
-
-        //所有的聊天室
-        /**
-         * $room_id=>[
-         *          room_id=>room_id,
-         *          admin_user=>admin_user
-         *          ]
-         */
-
-        $this->room = new \swoole_table(1048576);
-        $this->room->column('room_id', \swoole_table::TYPE_INT, 8);
-        $this->room->column('admin_user', \swoole_table::TYPE_STRING, 32);
-        $this->room->create();
 
 
         $this->server->on('Start', [$this, 'onStart']);
@@ -141,55 +162,42 @@ class WebSocket extends Common
     {
         echo "server:握手成功！用户id：{$request->fd}\n";
 
-        $this->init();
 
 //        $this->time_id = swoole_timer_tick(1000, function () use ($request, $server) {
 //            $server->push($request->fd, 'demo');
 //        });
 
+        $token = $request->get['token'];
 
-        $this->token = $request->get['token'];
+        $data = explode('__', $token);
 
-        if ($this->redis instanceof Client) {
+        if (count($data) == 2) {
 
-            $data = explode('__', $this->token);
+            $userId = $data[0];
 
-            if (count($data) == 2) {
+            if ($this->redis->hget($userId, 'token') == $token) {
 
-                $username = $data[0];
+                //存储用户信息
+                $hash = array('fd' => $request->fd, 'online' => true, 'token' => $token);
 
-                if ($this->redis->hget($username, 'token') == $this->token) {
-
-                    //存储用户信息
-                    $hash = array('fd' => $request->fd, 'online' => true, 'token' => $this->token);
-
-                    $this->redis->hmset($username, $hash);
+                $this->redis->hmset($userId, $hash);
 
 
-                    //存储id信息 fd=>user
-                    $fd_array = ['username' => $username, 'token' => $this->token];
+                //存进fd到所有用户内存表 fd=>$array
 
-                    $this->redis->hmset($request->fd, $fd_array);
+                $array = array('fd' => $request->fd, 'userId' => $userId, 'token' => $token);
 
+                $this->all_user->set($request->fd, $array);
 
-                    //存进fd到所有用户内存表 fd=>$array
-                    if ($this->all_user instanceof \swoole_table) {
+                //存一个对应的表 id=>$array
+                $this->all_fd->set($userId, $array);
 
-                        $array = array('fd' => $request->fd, 'username' => $username, 'token' => $this->token);
+            }
 
-                        $this->all_user->set($request->fd, $array);
+            //添加id到room_0
+            $this->redis->hset('room_0', $userId, $request->fd);
 
-                    }
-                }
-
-            } else unset($data);
-
-            //存储当前id
-
-            //添加id到room1
-            $this->redis->hset('room1', $request->fd, $request->fd);
-
-            $room = $this->redis->hkeys('room1');
+            $room = $this->redis->hkeys('room_0');
 
 
             //room 循环广播
@@ -199,10 +207,9 @@ class WebSocket extends Common
 
             }
 
-
-        } else echo 'redis-error' . __LINE__;
-
+        } else unset($data);
     }
+
 
 
     public function onMessage(\swoole_websocket_server $server, \swoole_websocket_frame $frame)
@@ -214,39 +221,45 @@ class WebSocket extends Common
 
         echo "message form {$frame->fd}:{$frame->data},opcode:{$frame->opcode},fin:{$frame->finish}\n";
 
-        $data = explode('__', $frame->data);
-        $type = $data[0];
+        $data = explode('__', $frame->data);  //发送过来的整条数据
+        $type = $data[0];                              //数据接收对象类型 0：为私聊 1：聊天室 2：所有用户广播
         $id = $data[1];
         $massage = $data[2];
         $fd = $frame->fd;
+        $from_user_id = $this->all_fd->get($fd)['id'];
+        $from_user_name = $this->all_fd->get($fd)['username'];
+
+        //type__id__name__id__data
+        $send_massage = $type . '__' . $from_user_id . '__' . $from_user_name . '__' . $id . '__' . $massage;
 
         switch ($type) {
             //私聊
             case 0:
-                if ($this->redis instanceof Client) {
 
-                    $object_fd = $this->redis->hget($id, 'fd');
+                $server->push($this->all_user->get($id, 'fd'), $send_massage);
+                break;
 
-                    $all_user = TB::getInstance($this->all_user);
-                    Db::
-                    TB::get()
-//                    $all_user->get()
+            case 1: //聊天室
+                $room_id = $this->room->get($id, 'room_id');
+                $fd_array = $this->redis->hgetall($room_id);
+                foreach ($fd_array as $fd) {
 
-                    $server->push($object_fd, $massage);
+                    $server->push($fd, $send_massage);
                 }
 
-
                 break;
-            case 1: //聊天室
 
             case 2:  //群发
 
                 if ($id == 'all_user') {
-                    if ($this->all_user instanceof \swoole_table)
-                        foreach ($this->all_user->get())
+
+                    foreach ($this->all_user as $user) {
+
+                        $server->push($user['fd'], $send_massage);
+                    }
+
                 }
         }
-
 
 
         if ($this->redis instanceof Client) {

@@ -24,6 +24,8 @@ use think\Cookie;
 
 class Index extends Common
 {
+    protected $redis;
+
     use \traits\controller\Jump;              /*引入jump*/
 
 
@@ -32,6 +34,12 @@ class Index extends Common
         //session 判断；
     }
 
+    public function __construct()
+    {
+        if (!$this->redis instanceof Client) {
+            $this->redis = new Client(Config::get('redis'));
+        }
+    }
 
     //php-ml test
     public function index_test()
@@ -54,29 +62,25 @@ class Index extends Common
         if (!request()->isPost()) {
             return json(['error' => '请求错误']);
         }
-        $connect = new Client(Config::get('redis'));
         $data = input();
         function su($connect, $data)
         {
 
-            $token = $data['username'] . '__' . date('YmdHis', time()) . uniqid();
+            $token = $data['userId'] . '__' . date('YmdHis', time()) . uniqid();
 
             Cookie::set('web_socket_token', $token, 3600);
 
             if ($connect instanceof Client) {
-                $connect->hset($data['username'], 'token', $token);
+                $connect->hset($data['userId'], 'token', $token);
                 $connect->set($token, null);
 //                $connect->set('online'.$connect->hget($data['username'],'username'),true);
             }
 
-
             return json(['success' => '登陆成功！']);
         }
 
-        return $data['password'] == $connect->hget($data['username'], 'password') ? su($connect, $data) : json(['error' => '用户名或密码错误！']);
+        return $data['password'] == $this->redis->hget($data['username'], 'password') ? su($this->redis, $data) : json(['error' => '用户名或密码错误！']);
     }
-
-
 
 
     //首页
@@ -171,13 +175,6 @@ class Index extends Common
     }
 
 
-    function demo_index()
-    {
-
-        return $this->fetch('index/demo');
-    }
-
-
     function server()
     {
         $server = new swoole_websocket_server("0.0.0.0", 9501);
@@ -213,8 +210,6 @@ class Index extends Common
         $method = 'GET';
         $headers = array();
         $url = 'http://Bond.liangyee.com/bus-api/Bond/BondInfo/GetSymbol?userKey=7D78A5D41F0D46E78D79A40BA96001C6';
-
-
         $curl = curl_init();
         curl_setopt($curl, CURLOPT_CUSTOMREQUEST, $method);
         curl_setopt($curl, CURLOPT_URL, $url);
