@@ -80,9 +80,9 @@ class Login extends Common
                     $this->error('账号或登录密码有误');
                 }
             }
-        } else {
-            return $this->fetch('login/charity');
         }
+        return $this->fetch('login/charity');
+
     }
 
 

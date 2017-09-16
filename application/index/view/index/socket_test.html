@@ -19,7 +19,7 @@
 <div class="left">
     <div><input style="margin: 0 auto;" type="text" id="message" name="message"
                 value="你好！"></div>
-    <div><input type="text" id="ip" name="ip" value="192.168.133.136"></div>
+    <div><input type="text" id="ip" name="ip" value="192.168.0.129"></div>
     <div><input type="text" id="port" name="port" value="9501"></div>
     <div><img src="" id="error"></div>
     <div><p id="log"></p></div>
@@ -31,7 +31,7 @@
 </div>
 <div class="right">
     <form id="login" method="post" action="{:url('index/index/swoole_login')}">
-        <div><input type="text" name="userId" id="userId" value="978861499"></div>
+        <div><input type="text" name="username" id="username" value="1"></div>
         <div><input type="text" name="password" id="password" value="password"></div>
         <div>
             <button onclick="login()">登陆</button>
@@ -122,4 +122,34 @@ src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.mi
 //    }
 
 </script>
+<script type="text/javascript">
+
+
+
+
+    ws = new WebSocket("ws://60.205.228.200:8283");
+    ws.onopen = function() {
+        ws.send('tom');
+    };
+    ws.onmessage = function(e) {
+
+        var data = eval("("+e.data+")");
+        var type = data.type || '';
+
+        switch(type){
+            case 'init':
+                $.post('http://xiny.xjspjyd.top/Home/Index/binding.html',
+                    {client_id: data.client_id,group:'XYBTCAVG'},
+                    function(data){
+                }, 'json');
+                break;
+            default :
+
+                var data   = JSON.parse(e.data);
+                console.log(data);
+
+        }
+    };
+</script>
+
 </html>

@@ -1,4 +1,4 @@
-<?php if (!defined('THINK_PATH')) exit(); /*a:3:{s:65:"/mnt/hgfs/html/getamaster/application/index/view/index/index.html";i:1500989996;s:67:"/mnt/hgfs/html/getamaster/application/index/view/common/header.html";i:1500989996;s:67:"/mnt/hgfs/html/getamaster/application/index/view/common/footer.html";i:1500989996;}*/ ?>
+<?php if (!defined('THINK_PATH')) exit(); /*a:3:{s:65:"/mnt/hgfs/html/getamaster/application/index/view/index/index.html";i:1503983700;s:67:"/mnt/hgfs/html/getamaster/application/index/view/common/header.html";i:1503983700;s:67:"/mnt/hgfs/html/getamaster/application/index/view/common/footer.html";i:1503983700;}*/ ?>
 <html>
 <head>
     <meta name="keywords" content="免费领养  免费领养小狗 免费领养小猫">

@@ -1,4 +1,4 @@
-<?php if (!defined('THINK_PATH')) exit(); /*a:1:{s:71:"/mnt/hgfs/html/getamaster/application/index/view/index/socket_test.html";i:1502950285;}*/ ?>
+<?php if (!defined('THINK_PATH')) exit(); /*a:1:{s:71:"/mnt/hgfs/html/getamaster/application/index/view/index/socket_test.html";i:1503983700;}*/ ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>

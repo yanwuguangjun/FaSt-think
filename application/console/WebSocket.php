@@ -27,23 +27,18 @@ class WebSocket extends Common
     //redis 连接
     protected $redis;
 
+    //所有的在线用户
     protected $all_user;
 
+    //所有的聊天室
     protected $room;
 
+    //所有fd
     protected $all_fd;
 
-    public static $demo;
 
-    public function init()
+    public function __construct($name = null)
     {
-
-
-    }
-
-    public function __construct()
-    {
-
         //所有人表
         /**
          * user_id=>[
@@ -63,8 +58,14 @@ class WebSocket extends Common
             $this->all_user->create();
         }
 
+
         /**
          * 所有人fd表
+         * fd=>[
+         * fd=>fd,
+         * id=>id
+         * username=>username
+         * ]
          */
         if (!$this->all_fd instanceof \swoole_table) {
             $this->all_fd = new \swoole_table(1048576);
@@ -92,6 +93,8 @@ class WebSocket extends Common
         if (!$this->redis instanceof Client) {
             $this->redis = new Client(Config::get('redis'));
         }
+
+        parent::__construct($name);
 
     }
 
@@ -178,26 +181,27 @@ class WebSocket extends Common
             if ($this->redis->hget($userId, 'token') == $token) {
 
                 //存储用户信息
-                $hash = array('fd' => $request->fd, 'online' => true, 'token' => $token);
+                $hash = array('fd' => $request->fd, 'online' => true);
 
                 $this->redis->hmset($userId, $hash);
 
 
                 //存进fd到所有用户内存表 fd=>$array
 
-                $array = array('fd' => $request->fd, 'userId' => $userId, 'token' => $token);
+                $array = array('fd' => $request->fd, 'id' => $userId, 'token' => $token);
 
-                $this->all_user->set($request->fd, $array);
+                $this->all_user->set($userId, $array);
 
-                //存一个对应的表 id=>$array
-                $this->all_fd->set($userId, $array);
+                //存一个对应的表 fd=>$array
+                $this->all_fd->set($request->fd, $array);
 
             }
 
             //添加id到room_0
             $this->redis->hset('room_0', $userId, $request->fd);
 
-            $room = $this->redis->hkeys('room_0');
+            //获取所有key
+            $room = $this->redis->hvals('room_0');
 
 
             //room 循环广播
@@ -209,7 +213,6 @@ class WebSocket extends Common
 
         } else unset($data);
     }
-
 
 
     public function onMessage(\swoole_websocket_server $server, \swoole_websocket_frame $frame)
@@ -253,18 +256,14 @@ class WebSocket extends Common
 
                 if ($id == 'all_user') {
 
-                    foreach ($this->all_user as $user) {
-
-                        $server->push($user['fd'], $send_massage);
+                    foreach ($server->connections as $fd){
+                        $server->push($fd,$send_massage);
                     }
 
                 }
         }
 
 
-        if ($this->redis instanceof Client) {
-
-        } else echo 'redis-error' . __LINE__;
 
 
 //        $server->push($frame->fd, "hello:{$frame->fd},this is server!");
@@ -277,34 +276,29 @@ class WebSocket extends Common
     {
         echo "client {$fd} closed\n";
 
+        $userId = $this->all_fd->get($fd, 'id');
 
-        if ($this->redis instanceof Client) {
+        $this->all_fd->del($fd);
 
-            $username = $this->redis->hget($fd, 'username');
+        $this->all_user->del($userId);
 
-            //整理user
-            $this->redis->hset($username, 'online', false);
 
-            $this->redis->hset($username, 'fd', false);
+        //整理user
+        $this->redis->hset($userId, 'online', false);
+        $this->redis->hset($userId, 'fd', false);
 
-            //清除fd
-            $this->redis->del($fd);
 
-            //从聊天室退出清除fd
-            $this->redis->hdel('room1', $fd);
+        //从聊天室退出清除fd
+        $this->redis->hdel('room_0',$userId);
 
-            //广播推出信息
 
-            foreach ($this->all_user as $item) {
-                $server->push($item, '小伙伴' . $item['fd'] . '退出聊天室');
-            }
+        //广播推出信息
+        foreach ($this->all_user as $item) {
+            $server->push($item['fd'], '小伙伴' . $item['fd'] . '退出聊天室');
+            var_dump($item);
+        }
 
-//            foreach ($this->redis->hkeys('room1') as $hkey) {
-//                $server->push($hkey, '小伙伴' . $fd . '退出聊天室');
-//            }
-            echo 'clear', $fd;
-        } else echo 'redis-error' . __LINE__;
-
+        echo 'clear', $fd;
 
 //        if (!empty($this->time_id)) swoole_timer_clear($this->time_id);
 
