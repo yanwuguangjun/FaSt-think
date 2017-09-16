@@ -46,7 +46,7 @@ class ToGame extends Common
         for ($i = 0; $i < $number; $i++) {
             $num = $this->getRandArrayNum($win);
             if ($num == 1) {
-                array_push($arr,$num);
+                array_push($arr, $num);
             }
         }
         return count($arr);
