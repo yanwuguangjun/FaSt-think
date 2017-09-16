@@ -34,12 +34,13 @@ class ToGame extends Common
     protected function execute(Input $input, Output $output)
     {
 
-//        echo $this->getRandArrayNum(91);
-        echo $this->check_rand(90,1000);
-
+        echo $this->getRandArrayNum($this->win);
+//        echo $this->check_rand(90, 1000);
+//        echo $this->relRandReturn($this->allNum);
+//        var_dump($this->relRandReturn());
     }
 
-    public function check_rand($win,$number = 100)
+    public function check_rand($win, $number = 100)
     {
         $arr = [];
         for ($i = 0; $i < $number; $i++) {
@@ -72,6 +73,106 @@ class ToGame extends Common
         for ($i = $number; $i < $max; $i++) {
             $arr[$i] = 0;
         }
+
+        return $this->randArrayValue($arr);
+    }
+
+
+    public function open()
+    {
+        if (!request()->isAjax()) {
+            return json(['msg' => 'request_error']);
+        }
+        return '';
+    }
+
+    public function getDealCard()
+    {
+        $ans = [
+            'k' => null,    //通吃
+            'BR' => null,   //红黑
+            'SD' => null,   //单双
+            'BS' => null,   //大小
+            'NUM' => null,  //数字
+            'FC' => null    //花色
+        ];
+        $data = [0, 0, 1,];
+        //如果下单了
+        if ($data[0] == '0') {
+            //直接返回随机卡牌
+            return json($this->relRandReturn());
+        }
+        //如果买了7
+        if ($data[1] != 0) {
+            if($this->randArrayValue($this->allNum) == 7){
+                $ans['k'] = true;
+                return json($ans);
+            }else{
+                $ans['k'] = false;
+            }
+        }
+
+
+        if ($data[])
+
+            $ans = [
+                'k' => null,    //通吃
+                'BR' => null,   //红黑
+                'SD' => null,   //单双
+                'BS' => null,   //大小
+                'NUM' => null,  //数字
+                'FC' => null    //花色
+            ];
+
+        return json($ans);
+    }
+
+    protected $allNum = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13];
+    protected $BR = ['black', 'red'];
+    protected $SD = ['single', 'double'];
+    protected $BS = ['big', 'small'];
+    protected $num = ['big', 'small'];
+    protected $RedImage = ['Hearts', 'diamonds'];
+    protected $BlackImage = ['spades', 'clubs'];
+    protected $BigNum = [8, 9, 10, 11, 12, 13];
+    protected $SmallNum = [1, 2, 3, 4, 5, 6];
+    protected $win = 50;
+
+    public function relRandReturn()
+    {
+        $ans = [
+            'BR' => null,   //红黑
+            'SD' => null,   //单双
+            'BS' => null,   //大小
+            'NUM' => null,  //数字
+            'FC' => null    //花色
+        ];
+
+        $ans['NUM'] = $this->randArrayValue($this->allNum);
+        if ($ans['NUM'] > 7) {
+            $ans['BS'] = 'big';
+        } elseif ($ans['NUM'] == 7) {
+            $ans['BS'] = null;
+        } else {
+            $ans['BS'] = 'small';
+        }
+
+        $ans['NUM'] % 2 == 0 ?
+            $ans['SD'] = 'double'
+            :
+            $ans['SD'] = 'single';
+        $ans['BR'] = $this->randArrayValue($this->BR);
+
+        $ans['BR'] == 'black' ?
+            $ans['FC'] = $this->randArrayValue($this->BlackImage)
+            :
+            $ans['FC'] = $this->randArrayValue($this->RedImage);
+
+        return $ans;
+    }
+
+    public function randArrayValue(array $arr)
+    {
         $key = array_rand($arr);
         return $arr[$key];
     }
