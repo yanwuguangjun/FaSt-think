@@ -11,4 +11,5 @@
 
 return [
     'app\console\WebSocket',
+    'app\console\ToGame',
 ];
