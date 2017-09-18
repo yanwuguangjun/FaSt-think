@@ -50,12 +50,48 @@ class ToGame extends Common
         //    $data = [0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
         // 下单总金额?  7? 大？ 小？ 单？ 双？ 黑？ 红？ 红桃 方片  黑桃  梅花
         $data = [1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+        $empty = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+        $max = 100;
+        $checked = $this->check_bet($data, $max);
+        if ($checked) {
+            var_dump($this->getDealCard($empty, 50));
+        } else {
+            echo '非法下注';
+        }
+
+
 //        var_dump($this->relRandReturn());
-        var_dump($this->getDealCard($data, 25));
 //        echo $this->getRandArrayNum($this->win);
 //        echo $this->check_rand(90, 1000);
 //        echo $this->relRandReturn($this->allNum);
 //        var_dump($this->relRandReturn());
+
+    }
+
+    public function check_bet(array $data, $max)
+    {
+        if ($data[0] > $max) {
+            return false;
+        }
+
+        if ($data[0] != $data[1] + $data[2] + $data[3]) {
+            return false;
+        }
+
+        if ($data[2] != 0 && $data[3] != 0) {
+            return false;
+        }
+
+        if ($data[4] != 0 && $data[5] != 0) {
+            return false;
+        }
+
+        if ($data[6] != 0 && $data[7] != 0) {
+            return false;
+        }
+
+        return true;
+
     }
 
     public function check_rand($win, $number = 100)
@@ -96,13 +132,13 @@ class ToGame extends Common
     }
 
 
-//    public function open()
-//    {
-//        if (!request()->isAjax()) {
-//            return json(['msg' => 'request_error']);
-//        }
-//        return '';
-//    }
+    public function open()
+    {
+        if (!request()->isAjax()) {
+            return json(['msg' => 'request_error']);
+        }
+        return '';
+    }
 
 //    $data = [0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
     // 下单总金额?  7? 大？ 小？ 单？ 双？ 黑？ 红？ 红桃 方片  黑桃  梅花
@@ -122,34 +158,38 @@ class ToGame extends Common
             return $this->relRandReturn();
         }
 
-        //如果买了7
-        if ($data[1] != 0) {
-            if ($this->randArrayValue($this->allNum) == 7) {
-                $ans['NUM'] = 7;
-                $ans['FC'] = $this->randArrayValue($this->allImage);
-                return $ans;
-            }
+        //7
+        if ($this->randArrayValue($this->allNum) == 7) {
+            $ans['NUM'] = 7;
+            $ans['FC'] = $this->randArrayValue($this->allImage);
+            return $ans;
         }
 
-        if ($data[2] != 0 xor $data[3] != 0) {
-            $this->BS($this->getRandArrayNum($win), $ans);
+
+        if ($data[2] != 0) {
+            $ans['BS'] = $this->CG($this->getRandArrayNum($win), $ans['BS'], 'big', 'small');
+        } elseif ($data[3] != 0) {
+            $ans['BS'] = $this->CG($this->getRandArrayNum($win), $ans['BS'], 'small', 'big');
         } elseif ($data[2] == 0 && $data[3] == 0) {
-            $this->BS($this->easyRand(), $ans);
+            $ans['BS'] = $this->CG($this->easyRand(), $ans['BS'], 'big', 'small');
         }
 
 
-        if ($data[4] != 0 xor $data[5] != 0) {
-            $this->SD($this->getRandArrayNum($win), $ans);
-                    return $ans['BS'];
-
+        if ($data[4] != 0) {
+            $ans['SD'] = $this->CG($this->getRandArrayNum($win), $ans['SD'], 'single', 'double');
+        } elseif ($data[5] != 0) {
+            $ans['SD'] = $this->CG($this->getRandArrayNum($win), $ans['SD'], 'double', 'single');
         } elseif ($data[4] == 0 && $data[5] == 0) {
-            $this->SD($this->easyRand(), $ans);
+            $ans['SD'] = $this->CG($this->easyRand(), $ans['SD'], 'double', 'single');
         }
 
-        if ($data[6] != 0 xor $data[7] != 0) {
-            $this->BR($this->getRandArrayNum($win), $ans);
+
+        if ($data[6] != 0) {
+            $ans['BR'] = $this->CG($this->getRandArrayNum($win), $ans['BR'], 'black', 'red');
+        } elseif ($data[7] != 0) {
+            $ans['BR'] = $this->CG($this->getRandArrayNum($win), $ans['BR'], 'red', 'black');
         } elseif ($data[6] == 0 && $data[7] == 0) {
-            $this->SD($this->easyRand(), $ans);
+            $ans['BR'] = $this->CG($this->easyRand(), $ans['BR'], 'black', 'red');
         }
 
         $ans['BR'] == 'black' ?
@@ -210,31 +250,16 @@ class ToGame extends Common
         return $arr[$key];
     }
 
-    protected function BS($randValue, $ans)
+    public function CG($randValue, $ans, $bs, $sb)
     {
-        $randValue ?
-            $ans['BS'] = 'big'
+        $randValue == 1 ?
+            $ans = $bs
             :
-            $ans['BS'] = 'small';
+            $ans = $sb;
+        return $ans;
     }
 
-    protected function SD($randValue, $ans)
-    {
-        $randValue ?
-            $ans['SD'] = 'single'
-            :
-            $ans['SD'] = 'double';
-    }
-
-    protected function BR($randValue, array $ans)
-    {
-        $randValue ?
-            $ans['BR'] = 'black'
-            :
-            $ans['BR'] = 'red';
-    }
-
-    protected function NUM(array $ans)
+    public function NUM(array $ans)
     {
 
         if ($ans['BS'] == 'big') {
@@ -249,10 +274,10 @@ class ToGame extends Common
             $arr_sd = $this->doubleNum;
         }
 
-        $arr_sd = array_flip($arr_sd);
-        $arr_bs = array_flip($arr_bs);
+        $arr = array_intersect($arr_bs, $arr_sd);
 
-        $ans['NUM'] = array_rand(array_intersect($arr_bs, $arr_sd));
+        $ans['NUM'] = $arr[array_rand($arr)];
+        var_dump($ans);
 
         return $ans['NUM'];
     }
