@@ -36,9 +36,9 @@ class ToGame extends Common
     protected $SD = ['single', 'double'];
     protected $BS = ['big', 'small'];
     protected $num = ['big', 'small'];
-    protected $RedImage = ['Hearts', 'diamonds'];
-    protected $BlackImage = ['spades', 'clubs'];
-    protected $allImage = ['Hearts', 'diamonds', 'spades', 'clubs'];
+    protected $RedImage = ['Hearts', 'Diamonds'];
+    protected $BlackImage = ['Spades', 'Clubs'];
+    protected $allImage = ['Hearts', 'Diamonds', 'Spades', 'Clubs'];
     protected $bigNum = [8, 9, 10, 11, 12, 13];
     protected $smallNum = [1, 2, 3, 4, 5, 6];
     protected $singleNum = [1, 3, 5, 9, 11, 13];
@@ -48,17 +48,29 @@ class ToGame extends Common
     protected function execute(Input $input, Output $output)
     {
         //    $data = [0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
-        // 下单总金额?  7? 大？ 小？ 单？ 双？ 黑？ 红？ 红桃 方片  黑桃  梅花
+        // 下单总金额?  7? 大？ 小？ 单？ 双？ 黑？ 红？ 红桃 黑桃 方片 梅花
+//        $data = [9, 2, 1, 0, 1, 0, 1, 0, 1, 1, 1, 1];
+        $data = [9, 2, 1, 0, 1, 0, 1, 0, 1, 1, 1, 1];
         $data = [1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0];
         $empty = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
         $max = 100;
+
+        //$checked  //pass
+        //$checked  //pass
+        $reData = [];
         $checked = $this->check_bet($data, $max);
-        if ($checked) {
-            var_dump($this->getDealCard($empty, 50));
-        } else {
-            echo '非法下注';
+//        var_dump($checked);
+        if (!$checked) {
+            $reData['msg'] = 'error';
+            return var_dump($reData);
         }
 
+        $uCard = $this->uCard($data);
+        $dealCard = $this->getDealCard($empty, 90);
+        $winCard = $this->uWin($uCard, $dealCard);
+        $reData['winNum'] = $this->contAll($data, $winCard);
+        $reData['card'] = $dealCard;
+        $reData['msg'] = 'success';
 
 //        var_dump($this->relRandReturn());
 //        echo $this->getRandArrayNum($this->win);
@@ -66,6 +78,131 @@ class ToGame extends Common
 //        echo $this->relRandReturn($this->allNum);
 //        var_dump($this->relRandReturn());
 
+        var_dump($reData);
+
+    }
+
+    public function contAll($data, $winCard)
+    {
+        $value = 0;
+
+        $ans = [
+            'BR' => null,   //红黑
+            'SD' => null,   //单双
+            'BS' => null,   //大小
+            'NUM' => null,  //数字
+            'FC' => null    //花色
+        ];
+        //    $data = [0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
+        // 下单总金额?  7? 大？ 小？ 单？ 双？ 黑？ 红？ 红桃 黑桃 方片 梅花
+        foreach ($winCard as $key => $item) {
+            switch ($key) {
+                case 'BR':
+                    $item == 'black' ?
+                        $value = $value + $data[6] * 2
+                        :
+                        $value = $value + $data[7] * 2;
+                    break;
+
+                case 'SD':
+                    $item == 'single' ?
+                        $value = $value + $data[4] * 2
+                        :
+                        $value = $value + $data[5] * 2;
+                    break;
+
+                case 'BS':
+                    $item == 'big' ?
+                        $value = $value + $data[2] * 2
+                        :
+                        $value = $value + $data[3] * 2;
+                    break;
+
+                case 'NUM':
+                    $value = $value + $data[1] * 10;
+                    break;
+
+                case 'FC':
+                    if ($item == 'Hearts') {
+                        $value = $value + $data[8] * 3;
+                    } elseif ($item == 'Spades') {
+                        $value = $value + $data[9] * 3;
+                    } elseif ($item == 'Diamonds') {
+                        $value = $value + $data[10] * 3;
+                    } elseif ($item == 'Clubs') {
+                        $value = $value + $data[11] * 3;
+                    }
+                    break;
+            }
+        }
+        return $value;
+    }
+
+    public function uWin($uCard, $dealCard)
+    {
+        $ans = [];
+
+        $ans = array_intersect_assoc($uCard, $dealCard);
+        if (isset($ans['NUM']) && $ans['NUM'] == 7) {
+            $ans = [];
+            $ans['NUM'] = 7;
+        }
+
+        return $ans;
+    }
+
+    public function uCard(array $data)
+    {
+        //    $data = [0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
+        // 下单总金额?  7? 大？ 小？ 单？ 双？ 黑？ 红？ 红桃 黑桃 方片 梅花
+//        $ans = [
+//            'BR' => null,   //红黑
+//            'SD' => null,   //单双
+//            'BS' => null,   //大小
+//            'NUM' => null,  //数字
+//            'FC' => null    //花色
+//        ];
+        $ans = [];
+
+        if ($data[1] != 0) {
+            $ans['NUM'] = 7;
+        }
+
+        if ($data[2] > $data[3]) {
+            $ans['BS'] = 'big';
+        } elseif ($data[2] < $data[3]) {
+            $ans['BS'] = 'small';
+        }
+
+        if ($data[4] > $data[5]) {
+            $ans['SD'] = 'single';
+        } elseif ($data[4] < $data[5]) {
+            $ans['SD'] = 'double';
+        }
+
+        if ($data[6] > $data[7]) {
+            $ans['BR'] = 'black';
+        } elseif ($data[6] < $data[7]) {
+            $ans['BR'] = 'red';
+        }
+
+        if ($data[8] > 0) {
+            $ans['FC'] = 'Hearts';
+        }
+
+        if ($data[9] > 0) {
+            $ans['FC'] = 'Spades';
+        }
+
+        if ($data[10] > 0) {
+            $ans['FC'] = 'Diamonds';
+        }
+
+        if ($data[11] > 0) {
+            $ans['FC'] = 'Clubs';
+        }
+
+        return $ans;
     }
 
     public function check_bet(array $data, $max)
@@ -74,24 +211,16 @@ class ToGame extends Common
             return false;
         }
 
-        if ($data[0] != $data[1] + $data[2] + $data[3]) {
+        if ($data[0] != $data[1] + $data[2] + $data[3] + $data[4] + $data[5] + $data[6] + $data[7] + $data[8] + $data[9] + $data[10] + $data[11]) {
             return false;
         }
 
-        if ($data[2] != 0 && $data[3] != 0) {
-            return false;
-        }
-
-        if ($data[4] != 0 && $data[5] != 0) {
-            return false;
-        }
-
-        if ($data[6] != 0 && $data[7] != 0) {
-            return false;
+        foreach ($data as $item) {
+            if ($item < 0)
+                return false;
         }
 
         return true;
-
     }
 
     public function check_rand($win, $number = 100)
@@ -141,7 +270,7 @@ class ToGame extends Common
     }
 
 //    $data = [0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
-    // 下单总金额?  7? 大？ 小？ 单？ 双？ 黑？ 红？ 红桃 方片  黑桃  梅花
+    // 下单总金额?  7? 大？ 小？ 单？ 双？ 黑？ 红？ 红桃 黑桃 方片 梅花
     public function getDealCard(array $data, $win)
     {
         $ans = [
@@ -161,34 +290,33 @@ class ToGame extends Common
         //7
         if ($this->randArrayValue($this->allNum) == 7) {
             $ans['NUM'] = 7;
-            $ans['FC'] = $this->randArrayValue($this->allImage);
             return $ans;
         }
 
 
-        if ($data[2] != 0) {
+        if (($data[2] - $data[3]) > 0) {
             $ans['BS'] = $this->CG($this->getRandArrayNum($win), $ans['BS'], 'big', 'small');
-        } elseif ($data[3] != 0) {
+        } elseif (($data[2] - $data[3]) < 0) {
             $ans['BS'] = $this->CG($this->getRandArrayNum($win), $ans['BS'], 'small', 'big');
-        } elseif ($data[2] == 0 && $data[3] == 0) {
+        } elseif (($data[2] - $data[3]) == 0) {
             $ans['BS'] = $this->CG($this->easyRand(), $ans['BS'], 'big', 'small');
         }
 
 
-        if ($data[4] != 0) {
+        if (($data[4] - $data[5]) > 0) {
             $ans['SD'] = $this->CG($this->getRandArrayNum($win), $ans['SD'], 'single', 'double');
-        } elseif ($data[5] != 0) {
+        } elseif (($data[4] - $data[5]) < 0) {
             $ans['SD'] = $this->CG($this->getRandArrayNum($win), $ans['SD'], 'double', 'single');
-        } elseif ($data[4] == 0 && $data[5] == 0) {
+        } elseif (($data[4] - $data[5]) == 0) {
             $ans['SD'] = $this->CG($this->easyRand(), $ans['SD'], 'double', 'single');
         }
 
 
-        if ($data[6] != 0) {
+        if (($data[6] - $data[7]) > 0) {
             $ans['BR'] = $this->CG($this->getRandArrayNum($win), $ans['BR'], 'black', 'red');
-        } elseif ($data[7] != 0) {
+        } elseif (($data[6] - $data[7]) < 0) {
             $ans['BR'] = $this->CG($this->getRandArrayNum($win), $ans['BR'], 'red', 'black');
-        } elseif ($data[6] == 0 && $data[7] == 0) {
+        } elseif (($data[6] - $data[7]) == 0) {
             $ans['BR'] = $this->CG($this->easyRand(), $ans['BR'], 'black', 'red');
         }
 
@@ -214,6 +342,10 @@ class ToGame extends Common
         ];
 
         $ans['NUM'] = $this->randArrayValue($this->allNum);
+
+         if ($ans['NUM'] == 7){
+            return $ans;
+        }
 
         if ($ans['NUM'] > 7) {
             $ans['BS'] = 'big';
@@ -277,7 +409,6 @@ class ToGame extends Common
         $arr = array_intersect($arr_bs, $arr_sd);
 
         $ans['NUM'] = $arr[array_rand($arr)];
-        var_dump($ans);
 
         return $ans['NUM'];
     }
@@ -310,7 +441,7 @@ class ToGame extends Common
 
     }
 
-    //指的是客户端关闭
+//指的是客户端关闭
     public function onClose(\swoole_websocket_server $server, $fd)
     {
 
